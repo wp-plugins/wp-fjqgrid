@@ -1,0 +1,7 @@
+/* Some themes may require a css tuning to display properly all the elements.
+These are optimized for TwenthyTwelve */
+.wpfjqgrid-middle {text-align:center;}
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight { background: none repeat scroll 0 0 #FFF900; }
+.ui-jqgrid .ui-jqgrid-pager {height: 35px;}
+/* do not wrap td content */
+.ui-jqgrid tr.jqgrow td {white-space: pre; white-space: nowrap;}
