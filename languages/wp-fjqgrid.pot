@@ -1,0 +1,47 @@
+# Copyright (C) 2014 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-fjqgrid\n"
+"POT-Creation-Date: 2014-01-28 19:56:41+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: faina09 <developer@faina09.it>\n"
+"Language-Team: LANGUAGE <developer@faina09.it>\n"
+
+#: inc/wp-fjqgrid-shortcodes.php:38
+msgid "Search"
+msgstr ""
+
+#: wp-fjqgrid.php:178
+msgid "%1$s Configuration Options"
+msgstr ""
+
+#: wp-fjqgrid.php:185
+msgid "active"
+msgstr ""
+
+#: wp-fjqgrid.php:188
+msgid "allowed tables (comma separated)"
+msgstr ""
+
+#: wp-fjqgrid.php:191
+msgid ""
+"custom fields formatting (| separated) es: table::field::align:'center',"
+"editoptions:{'size':40}|"
+msgstr ""
+
+#: wp-fjqgrid.php:194
+msgid "clean all on deactivate"
+msgstr ""
+
+#: wp-fjqgrid.php:199
+msgid "Save Changes"
+msgstr ""
+
+#: wp-fjqgrid.php:230
+msgid "No rights to open this table"
+msgstr ""

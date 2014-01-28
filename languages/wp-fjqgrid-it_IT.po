@@ -1,0 +1,57 @@
+# Copyright (C) 2013 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: wp-fjqgrid\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-fjqgrid\n"
+"POT-Creation-Date: 2014-01-28 19:56:41+00:00\n"
+"PO-Revision-Date: 2014-01-28 20:58+0100\n"
+"Last-Translator: faina09 <stefanocotterli@gmail.com>\n"
+"Language-Team: faina09 <developer@faina09.it>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: inc\n"
+
+#: inc/wp-fjqgrid-shortcodes.php:38
+msgid "Search"
+msgstr "Cerca"
+
+#: wp-fjqgrid.php:178
+msgid "%1$s Configuration Options"
+msgstr "Opzioni Configurazione %1"
+
+#: wp-fjqgrid.php:185
+msgid "active"
+msgstr "attivo"
+
+#: wp-fjqgrid.php:188
+msgid "allowed tables (comma separated)"
+msgstr "tabelle permesse (separate da virgola)"
+
+#: wp-fjqgrid.php:191
+msgid ""
+"custom fields formatting (| separated) es: table::field::align:'center',"
+"editoptions:{'size':40}|"
+msgstr ""
+"formattazione personalizzata campi (separate da |) es: tabella::campo::"
+"align:'center',editoptions:{'size':40}| "
+
+#: wp-fjqgrid.php:194
+msgid "clean all on deactivate"
+msgstr "pulisci tutto alla disattivazione"
+
+#: wp-fjqgrid.php:199
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+#: wp-fjqgrid.php:230
+msgid "No rights to open this table"
+msgstr "No ci sono i diritti per aprire questo file"
