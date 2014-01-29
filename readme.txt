@@ -1,5 +1,5 @@
 === WP FjqGrid ===
-Tags: jquery, jqGrid, grid, table
+Tags: jquery, jqGrid, grid, table, CRUD, searchable, sortable, editable
 Contributors: faina09
 Donate link: http://goo.gl/QzIZZ
 Requires at least: 3.5
@@ -27,7 +27,7 @@ Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">W
 1. Unzip and place the 'wp-fjqgrid' folder in your 'wp-content/plugins' directory.
 2. Activate the plugin.
 3. Click the 'WP FjqGrid' link in the WordPress setting menu, set at least 'Enable' and one or more tables names allowed; save (step REQUIRED).
-4. Use a shortcode [wp-fjqgrid table='existing_db_table' {idtable=1 caption='name to display'}] to display all the contents of the table.
+4. Use a shortcode [wp-fjqgrid table='existing_db_table' {idtable=1 caption='name to display' editable=true|false}] to display or CRUD all the contents of the table.
 
 == Frequently Asked Questions ==
 = Is it free? =
@@ -44,12 +44,12 @@ Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
 will be fixed in future realises, but until now...
--. You cannot use dashes in the table name (da verificare, migliorare l'elenco tabelle ammesse)
--. your table MUST have a field named id integer autoincrement that must be primary key. (TODO: check this in the code)
+-. You cannot use dashes in the table name
+-. Your table MUST have the first field that must be primary key
 -. There are security issues. Probably should limit access to logged-in users
--. The field render and size are set to a default, will be possible to set them for each field in the future
--. Still no edit possible
+-. The fields render and size are set to a default, possible but not easy to set them for each field
 -. No decode/pull down lists awailable
+-. edit/delete/insert does not check for errors! simply refuse to work...
 
 = Third parts js and css =
 jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
@@ -60,10 +60,13 @@ themes: jquery-ui-themes-1.10.4.zip - from http://jqueryui.com/
 2. Sample of 'WP FjqGrid' front page
 
 == Changelog ==
+= 0.02 =
+* edit/delete/insert on popup window
+
 = 0.01 =
 * Initial release of plugin.
 * Please test and report any issue you find, and any feature you want. I'll try to fix the firsts and to implement the seconds!
 
 == Upgrade Notice ==
-= 0.01 =
-* work in progress
+= 0.02 =
+* edit/delete/insert on popup window

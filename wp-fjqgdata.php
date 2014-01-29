@@ -12,27 +12,71 @@ if( !class_exists( 'FjqGridData' ) )
 			$this->wpf_code = $code;
 		}
 		
-		public function fjqg_header()
+		// Handles ajax GET/POST 
+		public function fjqg_header( $tablename )
 		{
-			//TODO if ( is_user_logged_in() )
-			// gestione ajax GET
-			if (isset($_GET['page'])) {
-				$tablename = $_GET['table'];
-				$is_search = isset($_GET['_search']) ? $_GET['_search'] : 'false';
-				$rows = $_GET['rows']; //page size
-				$page = $_GET['page']; //page to get
-				$sidx = $_GET['sidx']; //sort by
-				$sord = $_GET['sord']; //sort order
-				$sqlwhere = $this->fjqg_builfilter( $is_search );
-				$options = get_option( $this->wpf_code );
-				$allowed_tables = explode(',',$options['allowed']);
-				ob_clean();
-				if (in_array($tablename, $allowed_tables)) 
-					echo $this->fjqg_data($tablename, $sqlwhere, $page, $rows, $sidx, $sord);
-				else // no rights - null json object is returned
-					echo '[{"id": null}]';
-				die; //end GET
+			//TODO ? if ( is_user_logged_in() )
+			$options = get_option( $this->wpf_code );
+			$allowed_tables = explode(',',$options['allowed']);
+			if ( in_array( $tablename, $allowed_tables ) ) {
+
+				$is_search = isset( $_GET['_search'] ) ? $_GET['_search'] : false;
+				$rows = isset($_GET['rows'] ) ? $_GET['rows'] : 0; //page size
+				$page = isset($_GET['page'] ) ? $_GET['page'] : 0; //page to get
+				$sidx = isset($_GET['sidx'] ) ? $_GET['sidx'] : 'id'; //sort by
+				$sord = isset($_GET['sord'] ) ? $_GET['sord'] : 'ASC'; //sort order
+				$oper = isset($_POST['oper'] ) ? $_POST['oper'] : false;
+				
+				if ( $oper )
+				{
+					//id=2&city=Trieste&date=22%2F01%2F2014+00%3A00&population=150000&price=23.00&note=&code=&oper=edit
+					$post_str = $_POST;
+					require_once('inc/wp-fjqgrid-db.php');
+					$fjqdb = new FjqGridDB( false, $tablename, '', '' );
+					$id = $_POST['id'];
+					$data = array();
+					foreach($post_str as $k => $v) {
+						if ( $k != 'oper' ) {
+							$k = addslashes($k);
+							$v = addslashes($v);
+							$dataq[$k] = $v;
+							$names[] = "$k";
+							$values[] = "'$v'";
+						}
+					}
+					$data = "(" . implode(",", $names) . ") VALUES (" . implode(",", $values) . ")";
+			
+					$opok = false;
+					switch ( $oper ) {
+						case 'del':
+							$opok = $fjqdb->delete_row( $id );
+						break;
+						case 'edit':
+							$opok = $fjqdb->update_row( $id, $dataq );
+						break;
+						case 'add':
+							$opok = $fjqdb->insert_row( $dataq );
+						break;
+					}
+					if ( !$opok ) {
+						//TODO if error echo something...echo '[{"oper": '.$oper.'}]';
+						echo "error doing operation ".$oper;
+					}
+					die;
+				} 
+				else 
+				{
+					$sqlwhere = $this->fjqg_builfilter( $is_search );
+					$options = get_option( $this->wpf_code );
+					$allowed_tables = explode(',',$options['allowed']);
+					ob_clean();
+					if ( in_array( $tablename, $allowed_tables ) ) 
+						echo $this->fjqg_data( $tablename, $sqlwhere, $page, $rows, $sidx, $sord );
+					else // no rights - null json object is returned
+						echo '[{"id": null}]';
+				}
 			}
+			die; 
 		}			
 
 		private function fjqg_data( $tablename, $sqlwhere, $page, $rows, $sidx, $sord )
@@ -116,15 +160,15 @@ if( !class_exists( 'FjqGridData' ) )
 			//filters={"groupOp":"AND","rules":[{"field":"note","op":"bw","data":"n"}]}
 			$session_filter = "";
 			if ($is_search == 'true') {
-				$search_str = $this->fjqg_strip($_REQUEST['searchField']);
-				if ( !$search_str ) {
+				$search_field = isset( $_REQUEST['searchField'] ) ? $this->fjqg_strip($_REQUEST['searchField']) : "";
+				if ( $search_field == "") {
 					$search_filter = $this->fjqg_strip( $_REQUEST['filters'] );
 					$session_filter = $this->fjqg_builwhere( $search_filter );
 				}
 				else {			
 					$req_searchString = $this->fjqg_strip( $_REQUEST['searchString'] );
 					$req_searchOper = $this->fjqg_strip( $_REQUEST['searchOper'] );
-					$session_filter.= " AND " . $search_str;
+					$session_filter.= " AND " . $search_field;
 					switch ( $req_searchOper ) {
 					case "eq":
 						if ( is_numeric( $req_searchString ) ) {

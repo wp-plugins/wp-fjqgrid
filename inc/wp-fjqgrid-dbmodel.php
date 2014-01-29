@@ -139,7 +139,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 						$value = $tmp_val; 
 					}				
 					else  
-						for($j = 0; $j < sizeof( $value ); $j++)
+						for( $j = 0; $j < sizeof( $value ); $j++ )
 		        			$value[$j] = stripslashes( $value[$j] );
 				else
 					$value = stripslashes( $value );

@@ -7,6 +7,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		private $fieldsnames;
 		private $fieldstypes;
 		private $fieldssizes;
+		private $fields;
 		
 		public function __construct( $has_prefix, $table_name, $fields, $types )
 		{
@@ -27,9 +28,10 @@ if( !class_exists( 'FjqGridDB' ) )
 				$wpfjqgModel = new FjqGridDbModel();
 				$columns = $wpfjqgModel->fjqg_colModel ( $table_name, '' );
 				foreach( $columns as $col ) {
-					$this->fieldsnames[] = $col['title'];
+					$this->fieldsnames[] = $col['name'];
 					$this->fieldstypes[] = $col['type'];
-					$this->fieldssizes[] = $col['size'];		
+					$this->fieldssizes[] = $col['size'];
+					$this->fields[$col['name']]	= $col['type'];
 				}
 				/*//@@@ debug
 				global $wpfjqg;
@@ -62,50 +64,55 @@ if( !class_exists( 'FjqGridDB' ) )
 
 			dbDelta( $sql_create_table );
 		}
-		
+		/*
 		function get_table_columns_names ()
 		{
-		    return array( $this->fieldsnames );
+		    return array_values( $this->fieldsnames );
 		}
 		
-		function get_table_columns(){
-			return array( $this->fieldstypes );
+		function get_table_columns()
+		{
+			return  $this->fieldstypes;
 		}
-		
+		*/
 		/**
 		 * Inserts a row into the table
 		 *
 		 *@param $data array An array of key => value pairs to be inserted
 		 *@return int The ID of the created row. Or WP_Error or false on failure.
 		*/
-		function insert_row( $data=array() ){
+		function insert_row( $data=array() )
+		{
 		    global $wpdb;
-
-		    //Set default values special fileds
+			//TODO validation for all data type fields
+			
+		    /*//Set default values special fileds
 		    $data = wp_parse_args( $data, array(
 		                 'user_id'=> get_current_user_id(),
 		                 'date_now'=> current_time('timestamp'),
 		    		));
 
-		    //TODO for all data type fields
 		    //Check date validity
 			if ( $data['date_now'] <= 0 )
 		        return 0;
+		        
 		    //Convert date from local timestamp to GMT mysql format
 		    $data['data_now'] = date_i18n( 'Y-m-d H:i:s', $data['date_now'], true );
 
 		    //Initialise column format array
-		    $column_formats = $this->get_table_columns();
+		    $column_formats = $this->fieldstypes;
 
 		    //Force fields to lower case
 		    $data = array_change_key_case ( $data );
 
 		    //White list columns
-		    $data = array_intersect_key( $data, $column_formats );
+		    $data = array_intersect_key( $data, $this->fieldsnames );
 
 		    //Reorder $column_formats to match the order of columns given in $data
 		    $data_keys = array_keys( $data );
 		    $column_formats = array_merge( array_flip( $data_keys ), $column_formats );
+		    */
+			$column_formats = null;
 		    $wpdb->insert( $this->tablename, $data, $column_formats );
 
 		    return $wpdb->insert_id;
@@ -118,35 +125,33 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $data array An array of column=>value pairs to be updated
 		 *@return bool Whether the row was successfully updated.
 		*/
-		function update_row( $row_id, $data=array() ){
+		function update_row( $row_id, $data=array() )
+		{
 		    global $wpdb;
-
-		    //row ID must be positive integer
-		    $row_id = absint( $row_id );
 		    if( empty( $row_id ) )
 		         return false;
-
+			//TODO validation for all data type fields
+			
+			/*
 		    //Convert activity date from local timestamp to GMT mysql format
-		    if( isset( $data['order_data'] ) )
-		         $data['order_data'] = date_i18n( 'Y-m-d H:i:s', $data['date'], true );
+		    if( isset( $data['date_now'] ) )
+		         $data['date_now'] = date_i18n( 'Y-m-d H:i:s', $data['date_now'], true );
 
 		    //Initialise column format array
-		    $column_formats = $this->get_table_columns();
+		    $column_names = $this->get_table_columns_names ();
 
 		    //Force fields to lower case
-		    $data = array_change_key_case ( $data );
-
+		    //$data = array_change_key_case ( $data );
 		    //White list columns
-		    $data = array_intersect_key( $data, $column_formats );
-
+		    $data = array_intersect_key( $data, $this->fields );
 		    //Reorder $column_formats to match the order of columns given in $data
-		    $data_keys = array_keys($data);
-		    $column_formats = array_merge( array_flip( $data_keys ), $column_formats );
-
+		    $data_keys = array_keys( $data ); // $data_keys = 0=id; 1=>city; ..
+		    $column_formats = array_merge( array_flip( $data_keys ), $column_names );
+			*/
+			$column_formats = null;
 		    if ( false === $wpdb->update( $this->tablename, $data, array('id'=>$row_id), $column_formats ) ) {
 		         return false;
 		    }
-
 		    return true;
 		}
 
@@ -164,7 +169,8 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $query Query array
 		 *@return array Array of matching rows. False on error.
 		*/
-		function get_rows( $query=array() ){
+		function get_rows( $query=array() )
+		{
 			global $wpdb;
 			/* Parse defaults */
 			$defaults = array(
@@ -243,6 +249,7 @@ if( !class_exists( 'FjqGridDB' ) )
 			/* Form SQL statement */
 			$sql = "$select_sql $where_sql $order_sql $limit_sql";
 			if( 'count' == $fields ){
+				$sql = "$select_sql $where_sql";
 				return $wpdb->get_var( $sql );
 			}
 
@@ -259,27 +266,22 @@ if( !class_exists( 'FjqGridDB' ) )
 		/**
 		 * Deletes a row from the table
 		 *
-		 *@param $row_id int ID of the row to be deleted
+		 *@param $row_id ID of the row to be deleted
 		 *@return bool Whether the row was successfully deleted.
 		*/
-		function delete_row( $row_id ){
+		function delete_row( $row_id )
+		{
 		    global $wpdb;
-
-		    //row ID must be positive integer
 		    $row_id = absint( $row_id );
-
 		    if( empty( $row_id ) )
 		         return false;
 
 		    do_action( 'delete_rwg', $row_id );
-
 		    $sql = $wpdb->prepare( "DELETE from {$this->tablename} WHERE id = %d", $row_id );
-
 		    if( !$wpdb->query( $sql ) )
 		         return false;
 
 		    do_action( 'deleted_row', $row_id );
-
 		    return true;
 		}
 	}

@@ -3,12 +3,12 @@
 Plugin Name: WP FjqGrid
 Plugin URI: http://wordpress.org/extend/plugins/wp-fjqgrid/
 Description: jqGrid porting to wordpress
-Version: 0.01
+Version: 0.02
 Author: faina09
 Author URI: http://profiles.wordpress.org/faina09
 License: GPLv2 or later
 */
-$VER = '0.01';
+$VER = '0.02';
 defined( 'ABSPATH' ) OR exit;
 
 require_once('wp-fjqgdata.php');
@@ -42,7 +42,7 @@ class wpfjqAjax
 			$ajax = true;
 			$table = $_GET['table'];
 			$fjqgrid_json = new FjqGridData($wpfjqg->wpf_name, $wpfjqg->wpf_code, $wpfjqg->VER );
-			$fjqgrid_json->fjqg_header();
+			$fjqgrid_json->fjqg_header( $table );
 		}
   		else //just for debug 
 			echo json_encode( array(
