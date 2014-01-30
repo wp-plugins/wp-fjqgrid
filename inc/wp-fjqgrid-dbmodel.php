@@ -10,7 +10,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 		public function fjqg_colModel ( $table, $optionsfrmtfield )
 		{
 			$frmfields = explode ( "|", $optionsfrmtfield );
-			//table::field::align:\'center\',editoptions:{\'size\':40}|table::otherfied::otherformat
+			//table::field::align:'center',editoptions:{'size':40}|table::otherfied::otherformat
 			//extract in an array the user formattings for the fields that belongs to actual table
 			foreach ( $frmfields as $frmfield )
 			{
@@ -20,7 +20,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 				}
 			}
 		
-			$query_cmd = "SELECT * FROM $table LIMIT 1 OFFSET 0";
+			$query_cmd = "SELECT * FROM `$table` LIMIT 1 OFFSET 0";
 			$fetch_recordset = mysql_query($query_cmd);
 			$fields_cnt = mysql_num_fields($fetch_recordset);
 			for ($cnt = 0; $cnt < $fields_cnt; $cnt++){

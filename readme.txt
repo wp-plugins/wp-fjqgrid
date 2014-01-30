@@ -26,8 +26,10 @@ Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">W
 == Installation ==
 1. Unzip and place the 'wp-fjqgrid' folder in your 'wp-content/plugins' directory.
 2. Activate the plugin.
-3. Click the 'WP FjqGrid' link in the WordPress setting menu, set at least 'Enable' and one or more tables names allowed; save (step REQUIRED).
-4. Use a shortcode [wp-fjqgrid table='existing_db_table' {idtable=1 caption='name to display' editable=true|false}] to display or CRUD all the contents of the table.
+3. Click the 'WP FjqGrid' link in the WordPress setting menu
+4. check the 'Enable' and one or more tables names allowed (the precompiled fields are intended for a fast start)
+5. save (step REQUIRED).
+6. Use a shortcode like [wp-fjqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true] in any page or post to display a CRUD for the table!
 
 == Frequently Asked Questions ==
 = Is it free? =
@@ -43,13 +45,12 @@ Please send me the description of the error, and all the info you can about your
 * Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
-* You cannot use dashes in the table name
-* Your table MUST have the first field that must be primary key
+* Your table MUST have the first field set as primary key
 * There are security issues. Probably should limit access to logged-in users
 * The fields render and size are set to a default, possible but not easy to set them for each field
-* No decode/pull down lists awailable
-* edit/delete/insert does not check for errors! simply refuse to work...
-will be fixed in future realises, but until now...
+* No decode/pull down lists available
+* CRUD edit/delete/insert does not check for errors! simply refuse to work... 
+* (all these will be fixed in future releases, but until now...)
 
 = Third parts js and css =
 * jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
@@ -60,6 +61,10 @@ will be fixed in future realises, but until now...
 2. Sample of 'WP FjqGrid' front page
 
 == Changelog ==
+= 0.04 =
+* create tables from backend
+* fast startup parameters on setup page
+
 = 0.03 =
 * fix - better readme
 

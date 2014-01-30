@@ -65,9 +65,14 @@ if( !class_exists( 'FjqGrid' ) )
 	            return;
 	        $plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
 			if ( $plugin=='wp-fjqgrid/index.php' ) {
-				// delete option on deactivate
+				// delete options on deactivate
 		    	$options = get_option( 'wp-fjqgrid' );
-		    	if ( '1' === $options[do_uninstall] ) {
+		    	if ( $options['do_uninstall']==1 ) {
+		        	//drop tables in list
+		        	global $wpdb;
+		    		foreach (explode ( ",", $options['do_drop']) as $table )
+		    			$wpdb->query("DROP TABLE IF EXISTS `$table`");
+		        	//remove option entry
 		        	delete_option( 'wp-fjqgrid' );
 		    	}
 			}
@@ -162,24 +167,63 @@ if( !class_exists( 'FjqGrid' ) )
 		function foptions_validate( $input )
 		{
 			// value is either 0 or 1
-			if ( !isset ($input['active']) ) $input['active'] = 0;
+			if ( !isset ( $input['active']) ) $input['active'] = 0;
 			// text option must be safe text with no HTML tags, and no whitespaces
-		    $input['allowed'] = preg_replace('/\s+/', '', wp_filter_nohtml_kses($input['allowed']));
-		    // textarea option must be safe text with the allowed tags for posts
-		    $input['frmtfield'] = wp_filter_post_kses($input['frmtfield']);
+		    $input['allowed'] = preg_replace('/\s+/', '', wp_filter_nohtml_kses($input['allowed'] ) );
+		    $input['do_drop'] = preg_replace('/\s+/', '', wp_filter_nohtml_kses($input['do_drop'] ) );
+		    // textarea option must be safe text with the allowed tags for posts and no CRLF
+		    $crlf = array("\r\n", "\n", "\r");
+		    $input['frmtfield'] = str_replace( $crlf, '', wp_filter_post_kses($input['frmtfield'] ) );
+		    if ( isset( $input['do_createtable'] ) AND $input['do_createtable'] ) {
+		    	$createtable = str_replace( $crlf, '', wp_filter_nohtml_kses( $input['createtable'] ) );
+		    	$frmfields = explode ( "|", $createtable );
+				foreach ( $frmfields as $frmfield )
+				{
+					$frmarray = explode ( "::", $frmfield );
+					if ($frmarray[0]=="TABLENAME") {
+						$tablename = $frmarray[1];
+					}
+					else {
+						//here are the fields names - fileds types couples
+						$fields[] = $frmarray[0];
+						$types[]  = $frmarray[1];
+					}
+				}
+				require_once('inc/wp-fjqgrid-db.php');
+		    	$fjqgridDB = new FjqGridDB( false, $tablename, $fields, $types );
+		    	$fjqgridDB->create_table();
+		    }
+		    //do not save these two in options
+		    if ( isset( $input['do_createtable'] ) ) unset ( $input['do_createtable'] ); 
+		    if ( isset( $input['createtable'] ) ) unset ( $input['createtable'] ); 
 		    return $input;
 		}
 
 		public function fplugin_configure()
 		{
+			$createtable ="TABLENAME::wpf_jqgrid_sample|
+ID::int(11) NOT NULL AUTO_INCREMENT|
+City::varchar(100) DEFAULT NULL|
+Temp_C::decimal(10,2) DEFAULT NULL|
+DateTime::datetime DEFAULT NULL";
+			$options = array (
+				'active' => true,
+				'allowed' => "wpf_jqgrid_sample",
+				'frmtfield' => "wpf_jqgrid_sample::DateTime::align:'center',editoptions:{'size':40},formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'d/m/Y H:i'}|wpf_jqgrid_sample::ID::hidden:true",
+				'do_uninstall' => false,
+				'do_drop' => "wpf_jqgrid_sample",
+				'do_createtable' => false,
+				'createtable' => $createtable
+				);
 			?>
 			<div class="wrap">
 			<?php screen_icon(); ?>
 				<h2><?php printf(__( '%1$s Configuration Options' , $this->wpf_name), $this->wpf_name);?></h2>
 				<form method="post" action="options.php">
 					<?php settings_fields( $this->wpf_code.'_options' );
-					//do_settings_sections ( $this->wpf_code.'_options' );
-					$options = get_option( $this->wpf_code ); 
+					$options_read = stripslashes_deep( get_option( $this->wpf_code ) ); 
+					if ( is_array( $options_read ) ) $options = array_merge( $options, $options_read );
+					$options['frmtfield'] = str_replace("|", "|\r\n", $options['frmtfield']);
 					?>
 					<table class="form-table">
 						<tr valign="top"><th scope="row"><?php _e('active' , $this->wpf_code); ?></th>
@@ -191,9 +235,19 @@ if( !class_exists( 'FjqGrid' ) )
 						<tr valign="top"><th scope="row"><?php _e('custom fields formatting (| separated) es: table::field::align:\'center\',editoptions:{\'size\':40}|' , $this->wpf_code); ?></th>
 							<td><textarea rows="3" cols="80" style="height: 100px; width: 60%;" name="<?php echo $this->wpf_code; ?>[frmtfield]"><?php echo $options['frmtfield']; ?></textarea></td>
 						</tr>
-						<tr valign="top"><th scope="row"><?php _e('clean all on deactivate' , $this->wpf_code); ?></th>
+						<tr valign="top" style="background-color:#72969F;"><th scope="row"><?php _e('clean all on deactivate' , $this->wpf_code); ?></th>
 							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[do_uninstall]" value="1" <?php checked('1', $options['do_uninstall']); ?> /></td>
-						</tr>					
+						</tr>
+						<tr valign="top" style="background-color:#72969F;"><th scope="row"><?php _e('tables to drop on deactivate (comma separated)' , $this->wpf_code); ?></th>
+							<td><input type="text" style="width:80%;" name="<?php echo $this->wpf_code; ?>[do_drop]" value="<?php echo $options['do_drop']; ?>"/></td>
+						</tr>						
+						<tr valign="top" style="background-color:#558c9a;"><th scope="row"><?php _e('execute create table' , $this->wpf_code); ?></th>
+							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[do_createtable]" value="1" <?php checked('1', $options['do_createtable']); ?> /></td>
+						</tr>											
+						<tr valign="top" style="background-color:#558c9a;"><th scope="row"><?php _e('create table sql code' , $this->wpf_code); ?></th>
+							<td>
+							<textarea rows="3" cols="80" style="height: 100px; width: 60%;" name="<?php echo $this->wpf_code; ?>[createtable]"><?php echo $options['createtable']; ?></textarea></td>
+						</tr>
 						<tr><td colspan="2">
 							<p class="submit">
 							<input type="submit" class="button-primary" value="<?php _e('Save Changes', $this->wpf_code) ?>" />

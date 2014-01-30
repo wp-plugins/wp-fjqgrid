@@ -33,16 +33,15 @@ if( !class_exists( 'FjqGridDB' ) )
 					$this->fieldssizes[] = $col['size'];
 					$this->fields[$col['name']]	= $col['type'];
 				}
-				/*//@@@ debug
-				global $wpfjqg;
-				$wpfjqg->fplugin_log($this->fieldsnames);
-				$wpfjqg->fplugin_log($this->fieldstypes);
-				$wpfjqg->fplugin_log($this->fieldssizes);
-				*/
 			}
+			/*//@@@ debug
+			global $wpfjqg;
+			$wpfjqg->fplugin_log($this->fieldsnames);
+			$wpfjqg->fplugin_log($this->fieldstypes);
+			//$wpfjqg->fplugin_log($this->fieldssizes);*/
 		}
 		
-		function create_table()
+		public function create_table()
 		{
 			global $wpdb;
 			global $charset_collate;
@@ -50,22 +49,23 @@ if( !class_exists( 'FjqGridDB' ) )
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 			$fieldsdescr = '';
-			$i = 1;
-			foreach ($this->fieldsnames as $field )
-			{
+			$keyfield = $this->fieldsnames[0];
+			$i = 0;
+			foreach ($this->fieldsnames as $field )	{
 				$fieldsdescr .= $field.' '.$this->fieldstypes[$i++].', ';
 			}
 			
-			$sql_create_table = "CREATE TABLE {$this->tablename} (
-				id bigint(20) unsigned NOT NULL auto_increment,
+			$sql_create_table = "CREATE TABLE `{$this->tablename}` (
 				{$fieldsdescr} 
-				PRIMARY KEY  (id)
-				) $charset_collate; ";
+				PRIMARY KEY  ($keyfield)
+				) ENGINE=MyISAM $charset_collate; ";
 
+			//global $wpfjqg;
+			//$wpfjqg->fplugin_log($sql_create_table);
 			dbDelta( $sql_create_table );
 		}
 		
-		function get_table_columns_names ()
+		private function get_table_columns_names ()
 		{
 		    return array_values( $this->fieldsnames );
 		}
@@ -81,7 +81,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $data array An array of key => value pairs to be inserted
 		 *@return int The ID of the created row. Or WP_Error or false on failure.
 		*/
-		function insert_row( $data=array() )
+		public function insert_row( $data=array() )
 		{
 		    global $wpdb;
 			//TODO validation for all data type fields
@@ -125,7 +125,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $data array An array of column=>value pairs to be updated
 		 *@return bool Whether the row was successfully updated.
 		*/
-		function update_row( $row_id, $data=array() )
+		public function update_row( $row_id, $data=array() )
 		{
 		    global $wpdb;
 		    if( empty( $row_id ) )
@@ -169,7 +169,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $query Query array
 		 *@return array Array of matching rows. False on error.
 		*/
-		function get_rows( $query=array() )
+		public function get_rows( $query=array() )
 		{
 			global $wpdb;
 			/* Parse defaults */
@@ -207,13 +207,13 @@ if( !class_exists( 'FjqGridDB' ) )
 
 			//Return only selected fields. Empty is interpreted as all
 			if( empty($fields) ){
-				$select_sql = "SELECT * FROM {$this->tablename}";
+				$select_sql = "SELECT * FROM `{$this->tablename}`";
 			}
 			elseif( 'count' == $fields ) {
-				$select_sql = "SELECT COUNT(*) FROM {$this->tablename}";
+				$select_sql = "SELECT COUNT(*) FROM `{$this->tablename}`";
 			}
 			else {
-				$select_sql = "SELECT ".implode(',',$fields)." FROM {$this->tablename}";
+				$select_sql = "SELECT ".implode(',',$fields)." FROM `{$this->tablename}`";
 			}
 
 			/* SQL Join */
@@ -269,7 +269,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		 *@param $row_id ID of the row to be deleted
 		 *@return bool Whether the row was successfully deleted.
 		*/
-		function delete_row( $row_id )
+		public function delete_row( $row_id )
 		{
 		    global $wpdb;
 		    $row_id = absint( $row_id );
@@ -277,7 +277,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		         return false;
 
 		    do_action( 'delete_rwg', $row_id );
-		    $sql = $wpdb->prepare( "DELETE from {$this->tablename} WHERE id = %d", $row_id );
+		    $sql = $wpdb->prepare( "DELETE from `{$this->tablename}` WHERE id = %d", $row_id );
 		    if( !$wpdb->query( $sql ) )
 		         return false;
 
