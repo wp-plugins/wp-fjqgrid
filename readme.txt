@@ -37,29 +37,32 @@ Yes! The plugin is free. And jqGrid is free too, refers to: http://www.trirand.c
 Please send me the description of the error, and all the info you can about your configuration (WP, PHP and MySQL versions, configuration details,...). You can use WP plugin support page. I'll be happy to help you!
 
 = What I should be aware of? =
-Remember to set 'Enable' in the configuration page.
-Remember to list your table in the allowed ones in configuration page.
-The 'idtable' must be unique for each grid displayed: you can even display the same db table multiple times, but with differnet idtables.
-Some themes may require a css tuning to display properly all the elements.
+* Remember to set 'Enable' in the configuration page.
+* Remember to list your table in the allowed ones in configuration page.
+* The 'idtable' must be unique for each grid displayed: you can even display the same db table multiple times, but with differnet idtables.
+* Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
 will be fixed in future realises, but until now...
--. You cannot use dashes in the table name
--. Your table MUST have the first field that must be primary key
--. There are security issues. Probably should limit access to logged-in users
--. The fields render and size are set to a default, possible but not easy to set them for each field
--. No decode/pull down lists awailable
--. edit/delete/insert does not check for errors! simply refuse to work...
+* You cannot use dashes in the table name
+* Your table MUST have the first field that must be primary key
+* There are security issues. Probably should limit access to logged-in users
+* The fields render and size are set to a default, possible but not easy to set them for each field
+* No decode/pull down lists awailable
+* edit/delete/insert does not check for errors! simply refuse to work...
 
 = Third parts js and css =
-jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
-themes: jquery-ui-themes-1.10.4.zip - from http://jqueryui.com/
+* jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
+* themes: jquery-ui-themes-1.10.4.zip - from http://jqueryui.com/
 
 == Screenshots ==
 1. Setup 'WP FjqGrid'
 2. Sample of 'WP FjqGrid' front page
 
 == Changelog ==
+= 0.03 =
+* fix - better readme
+
 = 0.02 =
 * edit/delete/insert on popup window
 

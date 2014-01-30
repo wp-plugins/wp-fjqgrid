@@ -64,12 +64,12 @@ if( !class_exists( 'FjqGridDB' ) )
 
 			dbDelta( $sql_create_table );
 		}
-		/*
+		
 		function get_table_columns_names ()
 		{
 		    return array_values( $this->fieldsnames );
 		}
-		
+		/*
 		function get_table_columns()
 		{
 			return  $this->fieldstypes;
