@@ -43,13 +43,13 @@ Please send me the description of the error, and all the info you can about your
 * Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
-will be fixed in future realises, but until now...
 * You cannot use dashes in the table name
 * Your table MUST have the first field that must be primary key
 * There are security issues. Probably should limit access to logged-in users
 * The fields render and size are set to a default, possible but not easy to set them for each field
 * No decode/pull down lists awailable
 * edit/delete/insert does not check for errors! simply refuse to work...
+will be fixed in future realises, but until now...
 
 = Third parts js and css =
 * jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
