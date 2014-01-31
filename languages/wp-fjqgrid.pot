@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-fjqgrid\n"
-"POT-Creation-Date: 2014-01-28 19:56:41+00:00\n"
+"POT-Creation-Date: 2014-01-31 09:40:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,32 +16,44 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: wp-fjqgrid.php:178
+#: wp-fjqgrid.php:221
 msgid "%1$s Configuration Options"
 msgstr ""
 
-#: wp-fjqgrid.php:185
+#: wp-fjqgrid.php:229
 msgid "active"
 msgstr ""
 
-#: wp-fjqgrid.php:188
+#: wp-fjqgrid.php:232
 msgid "allowed tables (comma separated)"
 msgstr ""
 
-#: wp-fjqgrid.php:191
+#: wp-fjqgrid.php:235
 msgid ""
 "custom fields formatting (| separated) es: table::field::align:'center',"
 "editoptions:{'size':40}|"
 msgstr ""
 
-#: wp-fjqgrid.php:194
+#: wp-fjqgrid.php:238
 msgid "clean all on deactivate"
 msgstr ""
 
-#: wp-fjqgrid.php:199
+#: wp-fjqgrid.php:241
+msgid "tables to drop on deactivate (comma separated)"
+msgstr ""
+
+#: wp-fjqgrid.php:244
+msgid "execute create table"
+msgstr ""
+
+#: wp-fjqgrid.php:247
+msgid "create sql table"
+msgstr ""
+
+#: wp-fjqgrid.php:253
 msgid "Save Changes"
 msgstr ""
 
-#: wp-fjqgrid.php:230
+#: wp-fjqgrid.php:284
 msgid "No rights to open this table"
 msgstr ""

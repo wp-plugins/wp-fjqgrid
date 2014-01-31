@@ -244,7 +244,7 @@ DateTime::datetime DEFAULT NULL";
 						<tr valign="top" style="background-color:#558c9a;"><th scope="row"><?php _e('execute create table' , $this->wpf_code); ?></th>
 							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[do_createtable]" value="1" <?php checked('1', $options['do_createtable']); ?> /></td>
 						</tr>											
-						<tr valign="top" style="background-color:#558c9a;"><th scope="row"><?php _e('create table sql code' , $this->wpf_code); ?></th>
+						<tr valign="top" style="background-color:#558c9a;"><th scope="row"><?php _e('create sql table' , $this->wpf_code); ?></th>
 							<td>
 							<textarea rows="3" cols="80" style="height: 100px; width: 60%;" name="<?php echo $this->wpf_code; ?>[createtable]"><?php echo $options['createtable']; ?></textarea></td>
 						</tr>

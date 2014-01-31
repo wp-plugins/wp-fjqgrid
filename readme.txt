@@ -56,9 +56,19 @@ Please send me the description of the error, and all the info you can about your
 * jqGrid: jQuery Grid Plugin 4.4.3 – last version which support IE6 - from http://www.trirand.com/blog/jqgrid/downloads/jquery.jqGrid-4.4.3.zip
 * themes: jquery-ui-themes-1.10.4.zip - from http://jqueryui.com/
 
+= TODO =
+* op CUD check for data format errors
+* set rights to modify tables on setup and check on frontend
+* set key field(s) on fronted
+* decode required fields with a scrolldown list
+* edit/delete/insert on line
+* 1 to n slave table
+* simplify formatting settings on frontend for each field of a selected table
+
 == Screenshots ==
 1. Setup 'WP FjqGrid'
-2. Sample of 'WP FjqGrid' front page
+2. Sample of 'WP FjqGrid' front page, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
+3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
 
 == Changelog ==
 = 0.04 =
