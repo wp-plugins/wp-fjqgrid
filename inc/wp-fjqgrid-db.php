@@ -58,7 +58,7 @@ if( !class_exists( 'FjqGridDB' ) )
 			$sql_create_table = "CREATE TABLE `{$this->tablename}` (
 				{$fieldsdescr} 
 				PRIMARY KEY  ($keyfield)
-				) ENGINE=MyISAM $charset_collate; ";
+				) $charset_collate; ";
 
 			//global $wpfjqg;
 			//$wpfjqg->fplugin_log($sql_create_table);
@@ -112,10 +112,34 @@ if( !class_exists( 'FjqGridDB' ) )
 		    $data_keys = array_keys( $data );
 		    $column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 		    */
+		    
+		    // TODO - temporary fix only!!!!
+		    //(`ID`,`City`,`Temp_C`,`DateTime`,`id`) VALUES (0,'a','','','_empty')
+		    // $data = array ('ID'=>0,... 'id'=>'_empty')
+		    // if the key field (the 1st field, for now) is hidden, it is reported twice by POST
+		    // in this case the field MUST be autoincrement in mysql and MUST be removed from insert query:
+		    $data = $this->array_cleanup( $data );
+		    
 			$column_formats = null;
 		    $wpdb->insert( $this->tablename, $data, $column_formats );
 
 		    return $wpdb->insert_id;
+		}
+
+		private function array_cleanup( $array, $todelete=null )
+		{
+			if ( $todelete == null ){
+				foreach( $array as $key => $value )	{
+					if ( $value == '_empty' )
+						$todelete = $key;
+				}
+			}
+		    foreach( $array as $key => $value )
+		    {
+		        if ( strtolower( $key ) == strtolower( $todelete ) )
+		        	unset( $array[$key] );
+		    }
+		    return $array;
 		}
 
 		/**

@@ -57,9 +57,17 @@ if( !class_exists( 'FjqGridDbModel' ) )
 		{
 			//{title:'Id',name:'id',index:'id',editable:true,editoptions:{'size':20}},
 			$colModels = "";
-			foreach( $columns as $col )
-				$colModels .= "{title:'".$col['title']."',name:'".$col['name']."',index:'".$col['index']."',searchoptions:".$col['searchoptions'].",editable:".$col['editable'].",".$col['formatter']."},
-				";				
+			$i = 0; //TODO the key is set as the first field 
+			foreach( $columns as $col ) {
+				if ( $i==0 )
+					$colModels .= "{title:'".$col['title']."',name:'".$col['name']."',key:true,index:'".$col['index']."',searchoptions:".$col['searchoptions'].",editable:".$col['editable'].",".$col['formatter']."},
+					";
+				else
+					$colModels .= "{title:'".$col['title']."',name:'".$col['name']."',index:'".$col['index']."',searchoptions:".$col['searchoptions'].",editable:".$col['editable'].",".$col['formatter']."},
+					";
+				$i++;
+			}
+				
 			return $colModels;
 		}
 		
