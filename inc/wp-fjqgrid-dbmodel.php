@@ -31,6 +31,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 				$column["name"] = $name;
 				$column["type"] = $type;
 				$column["size"] = $size;
+				$column["flag"] = $flag;
 				$column["index"] = $name;
 				$column["title"] = ucwords( str_replace( "_", " ", $name ) );
  				$column["searchoptions"] = "{sopt:['bw','cn','eq','ne','ew','nu','nn']}";

@@ -36,7 +36,7 @@ if( !class_exists( 'FjqGridData' ) )
 					$id = $_POST['id'];
 					$data = array();
 					foreach($post_str as $k => $v) {
-						if ( $k != 'oper' ) {
+						if ( $k != 'oper' AND $k != 'id') {
 							$k = addslashes($k);
 							$v = addslashes($v);
 							$dataq[$k] = $v;

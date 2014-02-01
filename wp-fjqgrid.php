@@ -205,11 +205,12 @@ if( !class_exists( 'FjqGrid' ) )
 ID::int(11) NOT NULL AUTO_INCREMENT|
 City::varchar(100) DEFAULT NULL|
 Temp_C::decimal(10,2) DEFAULT NULL|
-DateTime::datetime DEFAULT NULL";
+Date::datetime DEFAULT NULL";
 			$options = array (
 				'active' => true,
 				'allowed' => "wpf_jqgrid_sample",
-				'frmtfield' => "wpf_jqgrid_sample::DateTime::align:'center',editoptions:{'size':40},formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'d/m/Y H:i'}|wpf_jqgrid_sample::ID::hidden:true",
+				'frmtfield' => "wpf_jqgrid_sample::Date::align:'center',formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'Y-m-d'},editrules: {required: false, date: true}|wpf_jqgrid_sample::ID::hidden:true",
+				//'frmtfield' => "wpf_jqgrid_sample::DateTime::align:'center',editoptions:{'size':40},formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'d/m/Y H:i'}|wpf_jqgrid_sample::ID::hidden:true",
 				'do_uninstall' => false,
 				'do_drop' => "wpf_jqgrid_sample",
 				'do_createtable' => false,
@@ -222,7 +223,10 @@ DateTime::datetime DEFAULT NULL";
 				<form method="post" action="options.php">
 					<?php settings_fields( $this->wpf_code.'_options' );
 					$options_read = stripslashes_deep( get_option( $this->wpf_code ) ); 
-					if ( is_array( $options_read ) ) $options = array_merge( $options, $options_read );
+					if ( is_array( $options_read ) )
+						$options = array_merge( $options, $options_read );
+					else
+						$options['do_createtable'] = true; //set this on first run
 					$options['frmtfield'] = str_replace("|", "|\r\n", $options['frmtfield']);
 					?>
 					<table class="form-table">

@@ -27,8 +27,8 @@ Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">W
 1. Unzip and place the 'wp-fjqgrid' folder in your 'wp-content/plugins' directory.
 2. Activate the plugin.
 3. Click the 'WP FjqGrid' link in the WordPress setting menu
-4. check the 'Enable' and one or more tables names allowed (the precompiled fields are intended for a fast start)
-5. save (step REQUIRED).
+4. Check the 'Enable' and one or more tables names allowed (the precompiled fields are intended for a fast start: just click "save")
+5. Save (step REQUIRED).
 6. Use a shortcode like [wp-fjqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true] in any page or post to display a CRUD for the table!
 
 == Frequently Asked Questions ==
@@ -49,6 +49,7 @@ Please send me the description of the error, and all the info you can about your
 * There are security issues. Probably should limit access to logged-in users
 * The fields render and size are set to a default, possible but not easy to set them for each field
 * No decode/pull down lists available
+* Must insert dates in format YYYY-MM-DD HH:MM and numbers with DOT decimal separator and NO thousand separator
 * CRUD edit/delete/insert does not check for errors! simply refuse to work... 
 * (all these will be fixed in future releases, but until now...)
 
@@ -59,7 +60,7 @@ Please send me the description of the error, and all the info you can about your
 = TODO =
 * op CUD check for data format errors
 * set rights to modify tables on setup and check on frontend
-* set key field(s) on fronted
+* set key field(s) on fronted or from DB
 * decode required fields with a scrolldown list
 * edit/delete/insert on line
 * 1 to n slave table
@@ -71,6 +72,11 @@ Please send me the description of the error, and all the info you can about your
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
 
 == Changelog ==
+= 0.05 =
+* fast and simplified first run
+* fix key field name and usage
+* edit date format
+
 = 0.04 =
 * create tables from backend
 * fast startup parameters on setup page
@@ -86,5 +92,8 @@ Please send me the description of the error, and all the info you can about your
 * Please test and report any issue you find, and any feature you want. I'll try to fix the firsts and to implement the seconds!
 
 == Upgrade Notice ==
+= 0.05 =
+* fast and simplified first run
+
 = 0.02 =
 * edit/delete/insert on popup window

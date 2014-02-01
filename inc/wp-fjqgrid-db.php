@@ -7,7 +7,9 @@ if( !class_exists( 'FjqGridDB' ) )
 		private $fieldsnames;
 		private $fieldstypes;
 		private $fieldssizes;
+		private $fieldsflags;
 		private $fields;
+		private $keyfield;
 		
 		public function __construct( $has_prefix, $table_name, $fields, $types )
 		{
@@ -28,17 +30,20 @@ if( !class_exists( 'FjqGridDB' ) )
 				$wpfjqgModel = new FjqGridDbModel();
 				$columns = $wpfjqgModel->fjqg_colModel ( $table_name, '' );
 				foreach( $columns as $col ) {
-					$this->fieldsnames[] = $col['name'];
-					$this->fieldstypes[] = $col['type'];
-					$this->fieldssizes[] = $col['size'];
+					$this->fieldsnames[] = $col['name']; //mykey
+					$this->fieldstypes[] = $col['type']; //int
+					$this->fieldssizes[] = $col['size']; //11
+					$this->fieldsflags[] = $col['flag']; //not_null primary_key autoincrement
 					$this->fields[$col['name']]	= $col['type'];
 				}
 			}
+			$this->keyfield = $this->fieldsnames[0];
 			/*//@@@ debug
 			global $wpfjqg;
 			$wpfjqg->fplugin_log($this->fieldsnames);
 			$wpfjqg->fplugin_log($this->fieldstypes);
-			//$wpfjqg->fplugin_log($this->fieldssizes);*/
+			$wpfjqg->fplugin_log($this->fieldssizes);
+			$wpfjqg->fplugin_log($this->fieldsflags);*/
 		}
 		
 		public function create_table()
@@ -49,7 +54,6 @@ if( !class_exists( 'FjqGridDB' ) )
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 			$fieldsdescr = '';
-			$keyfield = $this->fieldsnames[0];
 			$i = 0;
 			foreach ($this->fieldsnames as $field )	{
 				$fieldsdescr .= $field.' '.$this->fieldstypes[$i++].', ';
@@ -57,7 +61,7 @@ if( !class_exists( 'FjqGridDB' ) )
 			
 			$sql_create_table = "CREATE TABLE `{$this->tablename}` (
 				{$fieldsdescr} 
-				PRIMARY KEY  ($keyfield)
+				PRIMARY KEY  ($this->keyfield)
 				) $charset_collate; ";
 
 			//global $wpfjqg;
@@ -173,7 +177,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		    $column_formats = array_merge( array_flip( $data_keys ), $column_names );
 			*/
 			$column_formats = null;
-		    if ( false === $wpdb->update( $this->tablename, $data, array('id'=>$row_id), $column_formats ) ) {
+		    if ( false === $wpdb->update( $this->tablename, $data, array($this->keyfield=>$row_id), $column_formats ) ) {
 		         return false;
 		    }
 		    return true;
@@ -301,7 +305,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		         return false;
 
 		    do_action( 'delete_rwg', $row_id );
-		    $sql = $wpdb->prepare( "DELETE from `{$this->tablename}` WHERE id = %d", $row_id );
+		    $sql = $wpdb->prepare( "DELETE from `{$this->tablename}` WHERE `{$this->keyfield}` = %d", $row_id );
 		    if( !$wpdb->query( $sql ) )
 		         return false;
 
