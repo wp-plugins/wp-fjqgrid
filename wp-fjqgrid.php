@@ -8,6 +8,7 @@ if( !class_exists( 'FjqGrid' ) )
 		public $VER;
 		private $wpf_path;
 		private $wpf_pathshort;
+		private $wpf_loglevel;
 		
 		/// $name=human name of plugin, used in menu etc
 		/// $code=plugin code used in filenames, default shortcode, etc
@@ -21,6 +22,8 @@ if( !class_exists( 'FjqGrid' ) )
 			$this->wpf_path = plugin_dir_url( __FILE__ ); // http://..../plugins/wp-fxxx/
 			//$this->wpf_file = plugin_basename( __FILE__ ); // wp-fxxx/wp-fxxx.php
 			$this->wpf_pathshort = basename( dirname( __FILE__ )); // wp-fxxx
+			$options = get_option( $code );
+			$this->wpf_loglevel = isset( $options['log_level'] ) ? (int)$options['log_level'] : 3;
 			
 			add_action( 'plugins_loaded', array( $this, 'fplugin_init' ) );
 			
@@ -108,7 +111,10 @@ if( !class_exists( 'FjqGrid' ) )
 			wp_enqueue_script( $this->wpf_code );
 			
 			//from local, no CDN available
-			wp_register_script( 'jqg_code', $this->wpf_path.'jqGrid/js/jquery.jqGrid.min.js' );
+			//if ( $this->wpf_loglevel == 3 )//DEBUG only
+			//	wp_register_script( 'jqg_code', $this->wpf_path.'jqGrid/js/jquery.jqGrid.src.js' );
+			//else
+				wp_register_script( 'jqg_code', $this->wpf_path.'jqGrid/js/jquery.jqGrid.min.js' );
 			wp_enqueue_script( 'jqg_code' );
 			$lang = substr(get_locale(), 0, 2);		
 			wp_register_script( 'jqg_local',$this->wpf_path.'jqGrid/js/i18n/grid.locale-'.$lang .'.js' );
@@ -180,8 +186,11 @@ if( !class_exists( 'FjqGrid' ) )
 				foreach ( $frmfields as $frmfield )
 				{
 					$frmarray = explode ( "::", $frmfield );
-					if ($frmarray[0]=="TABLENAME") {
+					if ( $frmarray[0]=="TABLENAME" ) {
 						$tablename = $frmarray[1];
+					}
+					else if ( $frmarray[0]=="TABLEKEY" ){
+						$tablekey = $frmarray[1];
 					}
 					else {
 						//here are the fields names - fileds types couples
@@ -190,8 +199,8 @@ if( !class_exists( 'FjqGrid' ) )
 					}
 				}
 				require_once('inc/wp-fjqgrid-db.php');
-		    	$fjqgridDB = new FjqGridDB( false, $tablename, $fields, $types );
-		    	$fjqgridDB->create_table();
+		    	$fjqgridDB = new FjqGridDB( $tablename );
+		    	$fjqgridDB->create_table( $fields, $types, $tablekey );
 		    }
 		    //do not save these two in options
 		    if ( isset( $input['do_createtable'] ) ) unset ( $input['do_createtable'] ); 
@@ -202,12 +211,17 @@ if( !class_exists( 'FjqGrid' ) )
 		public function fplugin_configure()
 		{
 			$createtable ="TABLENAME::wpf_jqgrid_sample|
+TABLEKEY::ID|
 ID::int(11) NOT NULL AUTO_INCREMENT|
 City::varchar(100) DEFAULT NULL|
 Temp_C::decimal(10,2) DEFAULT NULL|
-Date::datetime DEFAULT NULL";
+Date::datetime DEFAULT NULL|
+High::int(5) NOT NULL|
+Verified::int(1) DEFAULT NULL";
 			$options = array (
 				'active' => true,
+				'log_level' => 0,
+				'capability' => "level_10",
 				'allowed' => "wpf_jqgrid_sample",
 				'frmtfield' => "wpf_jqgrid_sample::Date::align:'center',formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'Y-m-d'},editrules: {required: false, date: true}|wpf_jqgrid_sample::ID::hidden:true",
 				//'frmtfield' => "wpf_jqgrid_sample::DateTime::align:'center',editoptions:{'size':40},formatter:'date',formatoptions:{srcformat:'Y-m-d H:i:s',newformat:'d/m/Y H:i'}|wpf_jqgrid_sample::ID::hidden:true",
@@ -215,6 +229,26 @@ Date::datetime DEFAULT NULL";
 				'do_drop' => "wpf_jqgrid_sample",
 				'do_createtable' => false,
 				'createtable' => $createtable
+				);
+			// current_user_can ( $options['capability'] )
+			/*	User Level 0 converts to Subscriber
+				User Level 1 converts to Contributor
+				User Level 2 converts to Author
+				User Level 3 converts to Editor
+				User Level 4 converts to Editor
+				User Level 5 converts to Editor
+				User Level 6 converts to Editor
+				User Level 7 converts to Editor
+				User Level 8 converts to Administrator
+				User Level 9 converts to Administrator
+				User Level 10 converts to Administrator
+			*/
+			$cap = array (
+				'subscriber' => 'level_0',
+				'contributor' => 'level_1',
+				'author' => 'level_2',
+				'editor' => 'level_3',
+				'administrator' => 'level_10',
 				);
 			?>
 			<div class="wrap">
@@ -233,6 +267,28 @@ Date::datetime DEFAULT NULL";
 						<tr valign="top"><th scope="row"><?php _e('active' , $this->wpf_code); ?></th>
 							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[active]" value="1" <?php checked('1', $options['active']); ?> /></td>
 						</tr>
+						<tr valign="top"><th scope="row"><?php _e('log level' , $this->wpf_code); ?></th>
+							<td><select name="<?php echo $this->wpf_code; ?>[log_level]">
+								  <option value="0" <?php selected( $options['log_level'], 0 ); ?>>DISABLED</option>
+								  <option value="1" <?php selected( $options['log_level'], 1 ); ?>>ERROR</option>
+								  <option value="2" <?php selected( $options['log_level'], 2 ); ?>>INFO</option>
+								  <option value="3" <?php selected( $options['log_level'], 3 ); ?>>DEBUG</option>
+								</select>
+							 </td>
+						</tr>
+						<tr valign="top"><th scope="row"><?php _e('role required to edit tables' , $this->wpf_code); ?></th>
+							<td>
+							<select name="<?php echo $this->wpf_code; ?>[capability]">
+								<option value="" <?php selected( $options['capability'], "" ); ?>>No login required</option>
+								<?php global $wp_roles; ?>
+								<?php foreach( $wp_roles->role_names as $k => $v ): ?>
+									<?php if( isset($cap[$k]) ): ?>
+									<option value="<?php echo $cap[$k]; ?>" <?php selected( $options['capability'], $cap[$k] ); ?>><?php echo $v; ?></option>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</select>
+							</td>
+						</tr>											
 						<tr valign="top"><th scope="row"><?php _e('allowed tables (comma separated)' , $this->wpf_code); ?></th>
 							<td><input type="text" style="width:80%;" name="<?php echo $this->wpf_code; ?>[allowed]" value="<?php echo $options['allowed']; ?>"/></td>
 						</tr>
@@ -290,8 +346,10 @@ Date::datetime DEFAULT NULL";
 		
 		private function show_fshortcode( $options )
 		{
-			if ( ! $options['active'] )
+			if ( ! $options['active'] ) {
+				$this->fplugin_log( "not active shortcode - exit!" );
 				return '<!-- SHORTCODE NON ATTIVO DI '.$this->wpf_name.' con ID='.$ident.' VER. '.$this->VER.' --><br/>';
+			}
 			else {
 				require_once('inc/wp-fjqgrid-shortcodes.php');
 				$fjqgris_sc = new FjqGridShortCodes($this->wpf_name, $this->wpf_code, $this->VER );
@@ -304,7 +362,7 @@ Date::datetime DEFAULT NULL";
 	* Levels are: 1 for errors, 2 for normal activity, 3 for debug.
 	*/
 		public function fplugin_log( $text='', $level=2 ) {
-		    //if ((int) $this->options_main['logs'] < $level) return;
+		    if ( $this->wpf_loglevel < $level ) return;
 		    //$db = debug_backtrace(false);
 		    $time = date('d-m-Y H:i:s ');
 		    switch ($level) {
@@ -318,6 +376,27 @@ Date::datetime DEFAULT NULL";
 		    if (is_array( $text ) || is_object( $text ))
 		    	$text = print_r( $text, true );
 		    file_put_contents(dirname(__FILE__) . '/log.txt', $time . ' - ' . $text . "\n", FILE_APPEND | FILE_TEXT);
+		}
+		
+		public function fjqg_strip ( $value )
+		{
+			$mq = get_magic_quotes_gpc();
+			if( !$mq )
+		  	{
+		    	if( is_array($value) )  
+					if ( array_is_associative( $value ) )
+					{
+						foreach( $value as $k=>$v )
+							$tmp_val[$k] = stripslashes( $v );
+						$value = $tmp_val; 
+					}				
+					else  
+						for( $j = 0; $j < sizeof( $value ); $j++ )
+		        			$value[$j] = stripslashes( $value[$j] );
+				else
+					$value = stripslashes( $value );
+			}
+			return $value;
 		}
 	}
 }

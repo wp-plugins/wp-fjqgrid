@@ -1,52 +1,24 @@
 <?php
 if( !class_exists( 'FjqGridDB' ) )
 {
+	require_once('wp-fjqgrid-dbmodel.php');
+
 	class FjqGridDB
-	{
+	{	
 		private $tablename;
-		private $fieldsnames;
-		private $fieldstypes;
-		private $fieldssizes;
-		private $fieldsflags;
-		private $fields;
 		private $keyfield;
+		private $fieldsnames;
 		
-		public function __construct( $has_prefix, $table_name, $fields, $types )
+		public function __construct( $table_name )
 		{
-			global $wpdb;
-			if ($has_prefix)
-	    		$wpdb->$table_name = "{$wpdb->prefix}$table_name";
-			else
-				$wpdb->$table_name = "$table_name";
-			$this->tablename = $wpdb->$table_name;
+			$this->tablename = $table_name;
 			
-			/* this parameters are set only if a table create will be request */
-			if ( $fields != null AND $types != null) {
-				$this->fieldsnames = $fields;
-				$this->fieldstypes = $types;
-			}
-			else {			
-				require_once('wp-fjqgrid-dbmodel.php');
-				$wpfjqgModel = new FjqGridDbModel();
-				$columns = $wpfjqgModel->fjqg_colModel ( $table_name, '' );
-				foreach( $columns as $col ) {
-					$this->fieldsnames[] = $col['name']; //mykey
-					$this->fieldstypes[] = $col['type']; //int
-					$this->fieldssizes[] = $col['size']; //11
-					$this->fieldsflags[] = $col['flag']; //not_null primary_key autoincrement
-					$this->fields[$col['name']]	= $col['type'];
-				}
-			}
-			$this->keyfield = $this->fieldsnames[0];
-			/*//@@@ debug
-			global $wpfjqg;
-			$wpfjqg->fplugin_log($this->fieldsnames);
-			$wpfjqg->fplugin_log($this->fieldstypes);
-			$wpfjqg->fplugin_log($this->fieldssizes);
-			$wpfjqg->fplugin_log($this->fieldsflags);*/
+			$wpfjqgModel = new FjqGridDbModel( $table_name );
+			$this->keyfield = $wpfjqgModel->fjqg_getPK();
+			$this->fieldsnames = $wpfjqgModel->fjqg_getFieldsNames();
 		}
 		
-		public function create_table()
+		public function create_table( $fieldsnames, $fieldsdefs, $keyfield )
 		{
 			global $wpdb;
 			global $charset_collate;
@@ -55,17 +27,17 @@ if( !class_exists( 'FjqGridDB' ) )
 
 			$fieldsdescr = '';
 			$i = 0;
-			foreach ($this->fieldsnames as $field )	{
-				$fieldsdescr .= $field.' '.$this->fieldstypes[$i++].', ';
+			foreach ($fieldsnames as $field )	{
+				$fieldsdescr .= $field.' '.$fieldsdefs[$i++].', ';
 			}
 			
 			$sql_create_table = "CREATE TABLE `{$this->tablename}` (
 				{$fieldsdescr} 
-				PRIMARY KEY  ($this->keyfield)
+				PRIMARY KEY  ($keyfield)
 				) $charset_collate; ";
 
-			//global $wpfjqg;
-			//$wpfjqg->fplugin_log($sql_create_table);
+			global $wpfjqg;
+			$wpfjqg->fplugin_log( $sql_create_table, 3 );
 			dbDelta( $sql_create_table );
 		}
 		
@@ -176,7 +148,9 @@ if( !class_exists( 'FjqGridDB' ) )
 		    $data_keys = array_keys( $data ); // $data_keys = 0=id; 1=>city; ..
 		    $column_formats = array_merge( array_flip( $data_keys ), $column_names );
 			*/
+			
 			$column_formats = null;
+
 		    if ( false === $wpdb->update( $this->tablename, $data, array($this->keyfield=>$row_id), $column_formats ) ) {
 		         return false;
 		    }
@@ -305,6 +279,7 @@ if( !class_exists( 'FjqGridDB' ) )
 		         return false;
 
 		    do_action( 'delete_rwg', $row_id );
+		    
 		    $sql = $wpdb->prepare( "DELETE from `{$this->tablename}` WHERE `{$this->keyfield}` = %d", $row_id );
 		    if( !$wpdb->query( $sql ) )
 		         return false;

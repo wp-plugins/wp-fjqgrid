@@ -36,21 +36,23 @@ Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">W
 Yes! The plugin is free. And jqGrid is free too, refers to: http://www.trirand.com/blog/?page_id=932
 
 = The plugin is not working! What can I do? =
-Please send me the description of the error, and all the info you can about your configuration (WP, PHP and MySQL versions, configuration details,...). You can use WP plugin support page. I'll be happy to help you!
+Please send me the description of the error, and all the info you can about your configuration (WP, PHP and MySQL versions, configuration details,...).
+Useful may be also the MySQL script to create your table and the malfunctioning page html code.
+You can use WP plugin support page. I'll be happy to help you!
 
 = What I should be aware of? =
 * Remember to set 'Enable' in the configuration page.
 * Remember to list your table in the allowed ones in configuration page.
+* The 'custom fields formatting' is very tricky: use it only if you know what you are doing!
 * The 'idtable' must be unique for each grid displayed: you can even display the same db table multiple times, but with differnet idtables.
 * Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
-* Your table MUST have the first field set as primary key
-* There are security issues. Probably should limit access to logged-in users
+* Your table MUST have ONE and ONLY ONE field set as primary key, if not the first field will be use as PK.
 * The fields render and size are set to a default, possible but not easy to set them for each field
 * No decode/pull down lists available
-* Must insert dates in format YYYY-MM-DD HH:MM and numbers with DOT decimal separator and NO thousand separator
-* CRUD edit/delete/insert does not check for errors! simply refuse to work... 
+* Must insert numbers with DOT decimal separator and NO thousand separator
+* Datetime edit check is not supported in jqGrid
 * (all these will be fixed in future releases, but until now...)
 
 = Third parts js and css =
@@ -58,7 +60,6 @@ Please send me the description of the error, and all the info you can about your
 * themes: jquery-ui-themes-1.10.4.zip - from http://jqueryui.com/
 
 = TODO =
-* op CUD check for data format errors
 * set rights to modify tables on setup and check on frontend
 * set key field(s) on fronted or from DB
 * decode required fields with a scrolldown list
@@ -72,6 +73,12 @@ Please send me the description of the error, and all the info you can about your
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
 
 == Changelog ==
+= 0.06 =
+* any field (but only one) can be PK 
+* add log with settable level
+* add role (converted to capability) required to edit a table
+* some formatting added
+
 = 0.05 =
 * fast and simplified first run
 * fix key field name and usage

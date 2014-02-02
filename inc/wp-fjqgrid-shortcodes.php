@@ -15,23 +15,25 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 		
 		public function fjqgrid( $options )
 		{
-			return '<!--  SHORTCODE ATTIVO DI '.$this->wpf_name.' per la Tabella '.$options['table'].' VER. '.$this->VER.' -->'.
-				$this->fjqg_javascript ( $options );
+			global $wpfjqg;
+			$msg = '<!--  SHORTCODE ATTIVO DI '.$this->wpf_name.' per la Tabella '.$options['table'].' VER. '.$this->VER.' -->';
+			$wpfjqg->fplugin_log( $msg );
+			return $msg.$this->fjqg_javascript ( $options );
 		}
 		
 		private function fjqg_javascript ( $options )
 		{
+			global $wpfjqg;
 			require_once('wp-fjqgrid-dbmodel.php');
-			$wpfjqgModel = new FjqGridDbModel();
-			$idtable = $options['idtable'];
 			$table = $options['table'];
+			$idtable = $options['idtable'];
 			$caption = $options['caption']=='' ? $table : $options['caption'];
 			$nonce = $options['nonce'];
 			$url = "http://". $_SERVER["HTTP_HOST"] ."/wp-admin/admin-ajax.php?action=ajax-wpfjqg&nonce=".$nonce."&table=".$table;
-			$optionsfrmtfield = preg_replace( '/\r|\n/m', '', $wpfjqgModel->fjqg_strip($options['frmtfield']) );
-			$columns = $wpfjqgModel->fjqg_colModel ( $table, $optionsfrmtfield );
-			$colNames = $wpfjqgModel->fjqg_colNames( $columns );
-			$colModels = $wpfjqgModel->fjqg_colModels( $columns );
+			$optionsfrmtfield = preg_replace( '/\r|\n/m', '', $wpfjqg->fjqg_strip($options['frmtfield']) );
+			$wpfjqgModel = new FjqGridDbModel( $table, $optionsfrmtfield );
+			$colNames = $wpfjqgModel->fjqg_colNames( );
+			$colModels = $wpfjqgModel->fjqg_colModels( );
 			$navGrid = $this->fjqg_navGrid ( $options );
 			$out = "
 			<table id='wpfjqg_$idtable'></table><div id='wpfjqgNav_$idtable'></div>
@@ -104,7 +106,7 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 		private function fjqg_navGrid ( $options )
 		{
 			$idtable = $options['idtable'];
-			$editable = $options['editable'];
+			$editable = ( $options['editable'] AND ( $options['capability']=="" OR current_user_can ( $options['capability'] ) ) );
 			$out = "masterGrid = jQuery('#wpfjqg_$idtable').jqGrid('navGrid', '#wpfjqgNav_$idtable',
 				{ edit: $editable, add: $editable, del: $editable }, //options
 				{recreateForm: true,

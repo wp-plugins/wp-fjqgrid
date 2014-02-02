@@ -3,12 +3,12 @@
 Plugin Name: WP FjqGrid
 Plugin URI: http://wordpress.org/extend/plugins/wp-fjqgrid/
 Description: jqGrid porting to wordpress
-Version: 0.05
+Version: 0.06
 Author: faina09
 Author URI: http://profiles.wordpress.org/faina09
 License: GPLv2 or later
 */
-$VER = '0.05';
+$VER = '0.06';
 defined( 'ABSPATH' ) OR exit;
 
 require_once('wp-fjqgdata.php');
