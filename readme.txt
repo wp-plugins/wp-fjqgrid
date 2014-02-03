@@ -73,6 +73,10 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
 
 == Changelog ==
+= 0.07 =
+* minor fix (quotes, empty vars,..)
+* better log for debug
+
 = 0.06 =
 * any field (but only one) can be PK 
 * add log with settable level

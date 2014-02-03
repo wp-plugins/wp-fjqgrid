@@ -37,7 +37,7 @@ if( !class_exists( 'FjqGridDB' ) )
 				) $charset_collate; ";
 
 			global $wpfjqg;
-			$wpfjqg->fplugin_log( $sql_create_table, 3 );
+			$wpfjqg->fplugin_log( 'new table', $sql_create_table, 3 );
 			dbDelta( $sql_create_table );
 		}
 		

@@ -111,6 +111,7 @@ if( !class_exists( 'FjqGrid' ) )
 			wp_enqueue_script( $this->wpf_code );
 			
 			//from local, no CDN available
+			// $suffix = SCRIPT_DEBUG ? '' : '.min';
 			//if ( $this->wpf_loglevel == 3 )//DEBUG only
 			//	wp_register_script( 'jqg_code', $this->wpf_path.'jqGrid/js/jquery.jqGrid.src.js' );
 			//else
@@ -331,7 +332,7 @@ Verified::int(1) DEFAULT NULL";
 				'editable' => 'false',
 				'fields' => ''
 				), $atts, $this->wpf_code));
-			$options = get_option( $this->wpf_code );
+			$options = stripslashes_deep( get_option( $this->wpf_code ) ); 
 			$options['table'] = $table;
 			$options['idtable'] = $idtable;
 			$options['caption'] = $caption;
@@ -361,7 +362,7 @@ Verified::int(1) DEFAULT NULL";
 	/** Common functions
 	* Levels are: 1 for errors, 2 for normal activity, 3 for debug.
 	*/
-		public function fplugin_log( $text='', $level=2 ) {
+		public function fplugin_log( $msg='', $var='', $level=2 ) {
 		    if ( $this->wpf_loglevel < $level ) return;
 		    //$db = debug_backtrace(false);
 		    $time = date('d-m-Y H:i:s ');
@@ -373,9 +374,9 @@ Verified::int(1) DEFAULT NULL";
 		        case 3: $time .= '- DEBUG';
 		            break;
 		    }
-		    if (is_array( $text ) || is_object( $text ))
-		    	$text = print_r( $text, true );
-		    file_put_contents(dirname(__FILE__) . '/log.txt', $time . ' - ' . $text . "\n", FILE_APPEND | FILE_TEXT);
+		    if (is_array( $var ) || is_object( $var ))
+		    	$var = print_r( $var, true );
+		    file_put_contents(dirname(__FILE__) . '/log.txt', $time . ' : ' . $msg . ' - ' . $var . "\n", FILE_APPEND | FILE_TEXT);
 		}
 		
 		public function fjqg_strip ( $value )

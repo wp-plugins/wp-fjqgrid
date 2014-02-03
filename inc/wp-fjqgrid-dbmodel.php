@@ -30,11 +30,13 @@ if( !class_exists( 'FjqGridDbModel' ) )
 					}
 				}				
 			}
+			if ( isset ($frm))
+				$wpfjqg->fplugin_log( 'custom frm', $frm, 3 );
 		
 			$query_cmd = "SELECT * FROM `{$this->tablename}` LIMIT 1 OFFSET 0";
 			$fetch_recordset = mysql_query( $query_cmd );
 			if ( $fetch_recordset==null ) {
-				$wpfjqg->fplugin_log("Query non valida: " . mysql_error());
+				$wpfjqg->fplugin_log( "Query non valida", mysql_error(), 1 );
 				return;				
 			}
 			$fields_cnt = mysql_num_fields( $fetch_recordset );
@@ -59,7 +61,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 				$columns[] = $column;
 			}
 			$this->columns = $columns;
-			$wpfjqg->fplugin_log( $columns, 3 );
+			$wpfjqg->fplugin_log( 'columns', $columns, 3 );
 			
 			foreach( $columns as $col ) {
 					$this->fieldsnames[] = $col['name']; //mykey
@@ -71,7 +73,7 @@ if( !class_exists( 'FjqGridDbModel' ) )
 
 			$keyfield = $this->fieldsnames[0];
 			// search for primary_key
-			//$wpfjqg->fplugin_log($this->fieldsflags);
+			//$wpfjqg->fplugin_log('flags',$this->fieldsflags);
 			$keyword = 'primary_key';
 			$i = 0;
 			foreach ( $this->fieldsflags as $key=>$flg ) {

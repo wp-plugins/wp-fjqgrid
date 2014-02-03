@@ -106,7 +106,7 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 		private function fjqg_navGrid ( $options )
 		{
 			$idtable = $options['idtable'];
-			$editable = ( $options['editable'] AND ( $options['capability']=="" OR current_user_can ( $options['capability'] ) ) );
+			$editable = ( $options['editable'] AND ( $options['capability']=="" OR current_user_can ( $options['capability'] ) ) ) ? "true" : "false";
 			$out = "masterGrid = jQuery('#wpfjqg_$idtable').jqGrid('navGrid', '#wpfjqgNav_$idtable',
 				{ edit: $editable, add: $editable, del: $editable }, //options
 				{recreateForm: true,

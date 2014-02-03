@@ -15,7 +15,7 @@ if( !class_exists( 'FjqGridData' ) )
 		// Handles ajax GET/POST 
 		public function fjqg_header( $tablename )
 		{
-			$options = get_option( $this->wpf_code );
+			$options = stripslashes_deep( get_option( $this->wpf_code ) ); 
 			$allowed_tables = explode(',',$options['allowed']);
 			if ( in_array( $tablename, $allowed_tables ) ) {
 
@@ -67,7 +67,7 @@ if( !class_exists( 'FjqGridData' ) )
 				else 
 				{
 					$sqlwhere = $this->fjqg_builfilter( $is_search );
-					$options = get_option( $this->wpf_code );
+					$options = stripslashes_deep( get_option( $this->wpf_code ) ); 
 					$allowed_tables = explode( ',',$options['allowed'] );
 					ob_clean();
 					if ( in_array( $tablename, $allowed_tables ) ) 
