@@ -1,43 +1,45 @@
 <?php
-if( !class_exists( 'FjqGridShortCodes' ) )
-{
+if ( !class_exists( 'FjqGridShortCodes' ) ) {
+
 	class FjqGridShortCodes
 	{
+
 		private $wpf_name;
 		private $wpf_code;
 		private $VER;
+
 		public function __construct( $name, $code, $VER )
 		{
 			$this->wpf_name = $name;
 			$this->wpf_code = $code;
 			$this->VER = $VER;
 		}
-		
+
 		public function fjqgrid( $options )
 		{
 			global $wpfjqg;
-			$msg = '<!--  SHORTCODE ATTIVO DI '.$this->wpf_name.' per la Tabella '.$options['table'].' VER. '.$this->VER.' -->';
+			$msg = '<!--  SHORTCODE ATTIVO DI ' . $this->wpf_name . ' per la Tabella ' . $options['table'] . ' VER. ' . $this->VER . ' -->';
 			$wpfjqg->fplugin_log( $msg );
-			return $msg.$this->fjqg_javascript ( $options );
+			return $msg . $this->fjqg_javascript( $options );
 		}
-		
-		private function fjqg_javascript ( $options )
+
+		private function fjqg_javascript( $options )
 		{
 			global $wpfjqg;
 			require_once('wp-fjqgrid-dbmodel.php');
 			$table = $options['table'];
 			$idtable = $options['idtable'];
-			$caption = $options['caption']=='' ? $table : $options['caption'];
+			$caption = $options['caption'] == '' ? $table : $options['caption'];
 			$nonce = $options['nonce'];
-			$url = "http://". $_SERVER["HTTP_HOST"] ."/wp-admin/admin-ajax.php?action=ajax-wpfjqg&nonce=".$nonce."&table=".$table;
-			$optionsfrmtfield = preg_replace( '/\r|\n/m', '', $wpfjqg->fjqg_strip($options['frmtfield']) );
+			$url = "http://" . $_SERVER["HTTP_HOST"] . "/wp-admin/admin-ajax.php?action=ajax-wpfjqg&nonce=" . $nonce . "&table=" . $table;
+			$optionsfrmtfield = preg_replace( '/\r|\n/m', '', $wpfjqg->fjqg_strip( $options['frmtfield'] ) );
 			$wpfjqgModel = new FjqGridDbModel( $table, $optionsfrmtfield );
-			$colNames = $wpfjqgModel->fjqg_colNames( );
-			$colModels = $wpfjqgModel->fjqg_colModels( );
-			$navGrid = $this->fjqg_navGrid ( $options );
+			$colNames = $wpfjqgModel->fjqg_colNames();
+			$colModels = $wpfjqgModel->fjqg_colModels();
+			$navGrid = $this->fjqg_navGrid( $options );
 			$out = "
 			<table id='wpfjqg_$idtable'></table><div id='wpfjqgNav_$idtable'></div>
-			<div id='wpfjqgSearch_$idtable' class='fm-button ui-state-default ui-corner-all fm-button-icon-right ui-reset'>".__('Search', $this->wpf_code)."<span class='ui-icon ui-icon-search'/></div>
+			<div id='wpfjqgSearch_$idtable' class='fm-button ui-state-default ui-corner-all fm-button-icon-right ui-reset'>" . __( 'Search', $this->wpf_code ) . "<span class='ui-icon ui-icon-search'/></div>
 			<script type='text/javascript'>
 			var lastSel;
 			jQuery('#wpfjqg_$idtable').jqGrid({
@@ -70,8 +72,8 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 			</script>";
 			return $out;
 		}
-		
-		private function fjqg_onlineEdit ( $options )
+
+		private function fjqg_onlineEdit( $options )
 		{
 			$out = "/*
             loadComplete: function () {
@@ -102,11 +104,11 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 			*/";
 			return $out;
 		}
-			
-		private function fjqg_navGrid ( $options )
+
+		private function fjqg_navGrid( $options )
 		{
 			$idtable = $options['idtable'];
-			$editable = ( $options['editable'] AND ( $options['capability']=="" OR current_user_can ( $options['capability'] ) ) ) ? "true" : "false";
+			$editable = ( $options['editable'] AND ( $options['capability'] == "" OR current_user_can( $options['capability'] ) ) ) ? "true" : "false";
 			$out = "masterGrid = jQuery('#wpfjqg_$idtable').jqGrid('navGrid', '#wpfjqgNav_$idtable',
 				{ edit: $editable, add: $editable, del: $editable }, //options
 				{recreateForm: true,
@@ -125,5 +127,5 @@ if( !class_exists( 'FjqGridShortCodes' ) )
 			return $out;
 		}
 	}
+
 }
-?>

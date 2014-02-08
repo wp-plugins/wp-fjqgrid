@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: WP FjqGrid
-Plugin URI: http://wordpress.org/extend/plugins/wp-fjqgrid/
-Description: jqGrid porting to wordpress
-Version: 0.07
-Author: faina09
-Author URI: http://profiles.wordpress.org/faina09
-License: GPLv2 or later
-*/
-$VER = '0.07';
+  Plugin Name: WP FjqGrid
+  Plugin URI: http://wordpress.org/extend/plugins/wp-fjqgrid/
+  Description: jqGrid porting to wordpress
+  Version: 0.08
+  Author: faina09
+  Author URI: http://profiles.wordpress.org/faina09
+  License: GPLv2 or later
+ */
+$VER = '0.08';
 defined( 'ABSPATH' ) OR exit;
 
 require_once('wp-fjqgdata.php');
@@ -23,6 +23,7 @@ register_deactivation_hook( __FILE__, array( 'FjqGrid', 'fplugin_deactivate' ) )
 
 class wpfjqAjax
 {
+
 	public function __construct()
 	{
 		if ( is_admin() ) {
@@ -34,27 +35,27 @@ class wpfjqAjax
 	public function ajax_call()
 	{
 		global $wpfjqg;
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $wpfjqg->wpf_code.'-nonce' ) )
-			die ( 'Invalid Nonce' );
+		if ( !isset( $_REQUEST['nonce'] ) || !wp_verify_nonce( $_REQUEST['nonce'], $wpfjqg->wpf_code . '-nonce' ) ) {
+			die( 'Invalid Nonce' );
+		}
 
 		header( "Content-Type: application/json" );
 		if ( isset( $_GET['table'] ) ) {
 			$ajax = true;
 			$table = $_GET['table'];
-			$fjqgrid_json = new FjqGridData($wpfjqg->wpf_name, $wpfjqg->wpf_code, $wpfjqg->VER );
+			$fjqgrid_json = new FjqGridData( $wpfjqg->wpf_name, $wpfjqg->wpf_code, $wpfjqg->VER );
 			$fjqgrid_json->fjqg_header( $table );
-		}
-  		else //just for debug 
+		} else {
+			//just for debug 
 			echo json_encode( array(
 				'success' => 'no GET[table] set ',
 				'time' => time(),
 				'isajax' => $ajax,
 				'table' => $table
 			) );
-		die(0);
+		}
+		die( 0 );
 	}
 }
 
 $wpfjqAjax = new wpfjqAjax();
-
-?>
