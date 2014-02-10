@@ -123,9 +123,10 @@ if ( !class_exists( 'FjqGrid' ) ) {
 			wp_enqueue_script( 'jqg_code' );
 			$lang = substr( get_locale(), 0, 2 );
 			$avail = array( "it" );
-			if ( in_array( $lang, $avail ) ) {
-				wp_register_script( 'jqg_local', $this->wpf_path . 'jqGrid/js/i18n/grid.locale-' . $lang . '.js' );
+			if ( ! in_array( $lang, $avail ) ) {
+				$lang = "en";
 			}
+			wp_register_script( 'jqg_local', $this->wpf_path . 'jqGrid/js/i18n/grid.locale-' . $lang . '.js' );
 			wp_enqueue_script( 'jqg_local' );
 		}
 
