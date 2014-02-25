@@ -31,7 +31,8 @@ if ( !class_exists( 'FjqGridShortCodes' ) ) {
 			$idtable = $options['idtable'];
 			$caption = $options['caption'] == '' ? $table : $options['caption'];
 			$nonce = $options['nonce'];
-			$url = "http://" . $_SERVER["HTTP_HOST"] . "/wp-admin/admin-ajax.php?action=ajax-wpfjqg&nonce=" . $nonce . "&table=" . $table;
+			// TODO check if network and use network_admin_url()
+			$url = admin_url() . "/admin-ajax.php?action=ajax-wpfjqg&nonce=" . $nonce . "&table=" . $table;
 			$optionsfrmtfield = preg_replace( '/\r|\n/m', '', $wpfjqg->fjqg_strip( $options['frmtfield'] ) );
 			$wpfjqgModel = new FjqGridDbModel( $table, $optionsfrmtfield );
 			$colNames = $wpfjqgModel->fjqg_colNames();

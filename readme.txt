@@ -73,6 +73,9 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
 
 == Changelog ==
+= 0.09 =
+* admin-ajax.php path fix (tnx to michael walker)
+
 = 0.08 =
 * js fix
 * reformat code
@@ -107,6 +110,9 @@ You can use WP plugin support page. I'll be happy to help you!
 * Please test and report any issue you find, and any feature you want. I'll try to fix the firsts and to implement the seconds!
 
 == Upgrade Notice ==
+= 0.09 =
+* admin-ajax.php path fix (tnx to michael walker)
+
 = 0.05 =
 * fast and simplified first run
 
