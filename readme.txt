@@ -1,4 +1,4 @@
-=== WP FjqGrid ===
+=== WPF-jqGrid ===
 Tags: jquery, jqGrid, grid, table, CRUD, searchable, sortable, editable
 Contributors: faina09
 Donate link: http://goo.gl/QzIZZ
@@ -21,15 +21,15 @@ I planned to develop many other features, but this depends by the interest of th
 
 If any bug found please ask me for support!
 
-Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
+Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Installation ==
-1. Unzip and place the 'wp-fjqgrid' folder in your 'wp-content/plugins' directory.
+1. Unzip and place the 'wpf-jqgrid' folder in your 'wp-content/plugins' directory.
 2. Activate the plugin.
-3. Click the 'WP FjqGrid' link in the WordPress setting menu
+3. Click the 'WPF-jqGrid' link in the WordPress setting menu
 4. Check the 'Enable' and one or more tables names allowed (the precompiled fields are intended for a fast start: just click "save")
 5. Save (step REQUIRED).
-6. Use a shortcode like [wp-fjqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true] in any page or post to display a CRUD for the table!
+6. Use a shortcode like [wpf-jqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true] in any page or post to display a CRUD for the table!
 
 == Frequently Asked Questions ==
 = Is it free? =
@@ -68,11 +68,15 @@ You can use WP plugin support page. I'll be happy to help you!
 * simplify formatting settings on frontend for each field of a selected table
 
 == Screenshots ==
-1. Setup 'WP FjqGrid'
-2. Sample of 'WP FjqGrid' front page, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
-3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WP FjqGrid developer's site</a>
+1. Setup 'WPF-jqGrid'
+2. Sample of 'WPF-jqGrid' front page, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
+3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.10 =
+* sortby=field,asc|desc into shortcode
+* ATTENTION: renamed, need resave setup page and rename shortcode to [wpf-jqgrid]
+
 = 0.09 =
 * admin-ajax.php path fix (tnx to michael walker)
 

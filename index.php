@@ -1,22 +1,22 @@
 <?php
 /*
-  Plugin Name: WP FjqGrid
-  Plugin URI: http://wordpress.org/extend/plugins/wp-fjqgrid/
+  Plugin Name: WPF-jqGrid
+  Plugin URI: http://wordpress.org/extend/plugins/wpf-jqgrid/
   Description: jqGrid porting to wordpress
-  Version: 0.09
+  Version: 0.10
   Author: faina09
   Author URI: http://profiles.wordpress.org/faina09
   License: GPLv2 or later
  */
-$VER = '0.09';
+$VER = '0.10';
 defined( 'ABSPATH' ) OR exit;
 
-require_once('wp-fjqgdata.php');
-require_once('wp-fjqgrid.php');
+require_once('wpf-jqgdata.php');
+require_once('wpf-jqgrid.php');
 
 global $wpfjqg;
 
-$wpfjqg = new FjqGrid( 'WP FjqGrid', 'wp-fjqgrid', $VER );
+$wpfjqg = new FjqGrid( 'WPF-jqGrid', 'wpf-jqgrid', $VER );
 register_activation_hook( __FILE__, array( 'FjqGrid', 'fplugin_activate' ) );
 register_uninstall_hook( __FILE__, array( 'FjqGrid', 'fplugin_uninstall' ) );
 register_deactivation_hook( __FILE__, array( 'FjqGrid', 'fplugin_deactivate' ) );

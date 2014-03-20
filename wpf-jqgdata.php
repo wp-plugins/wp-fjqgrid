@@ -1,6 +1,6 @@
 <?php
 /*
-  AJAX Get data from table pages with [wp-fjqgrid Table="..."]
+  AJAX Get data from table pages with [wpf-jqgrid Table="..."]
  */
 if ( !class_exists( 'FjqGridData' ) ) {
 
@@ -32,7 +32,7 @@ if ( !class_exists( 'FjqGridData' ) ) {
 				if ( $oper AND ( $options['capability'] == "" OR current_user_can( $options['capability'] ) ) ) {
 					//id=2&city=Trieste&date=22%2F01%2F2014+00%3A00&population=150000&price=23.00&note=&code=&oper=edit
 					$post_str = $_POST;
-					require_once('inc/wp-fjqgrid-db.php');
+					require_once('inc/wpf-jqgrid-db.php');
 					$fjqdb = new FjqGridDB( $tablename );
 					$id = $_POST['id'];
 					//$data = array();
@@ -83,7 +83,7 @@ if ( !class_exists( 'FjqGridData' ) ) {
 
 		private function fjqg_data( $tablename, $sqlwhere, $page, $rows, $sidx, $sord )
 		{
-			require_once('inc/wp-fjqgrid-db.php');
+			require_once('inc/wpf-jqgrid-db.php');
 			$fjqdb = new FjqGridDB( $tablename );
 
 			$data = new stdClass();
@@ -172,9 +172,9 @@ if ( !class_exists( 'FjqGridData' ) ) {
 					$req_searchOper = $wpfjqg->fjqg_strip( $_REQUEST['searchOper'] );
 					$session_filter = " AND " . $search_field . $this->fjqg_filter( $req_searchString, $req_searchOper );
 				}
-				$_SESSION["wp-fjqgrid_filter"] = $session_filter;
+				$_SESSION["wpf-jqgrid_filter"] = $session_filter;
 			} elseif ( $is_search == 'false' ) {
-				$_SESSION["wp-fjqgrid_filter"] = '';
+				$_SESSION["wpf-jqgrid_filter"] = '';
 			}
 			return $session_filter;
 		}

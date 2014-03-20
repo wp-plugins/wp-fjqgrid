@@ -13,16 +13,16 @@ if ( !class_exists( 'FjqGrid' ) ) {
 
 		/// $name=human name of plugin, used in menu etc
 		/// $code=plugin code used in filenames, default shortcode, etc
-		public function __construct( $name = 'WP Fxxx', $code = 'wp-fxxx', $VER = '0.01' )
+		public function __construct( $name = 'WPF-xxx', $code = 'wpf-xxx', $VER = '0.01' )
 		{
 			$option_page = true; // display voice menu entry in 'Settings'
 			$menu_page = false; // display voice menu entry in 'Tools' or any other
 			$this->wpf_name = $name;
 			$this->wpf_code = $code;
 			$this->VER = $VER;
-			$this->wpf_path = plugin_dir_url( __FILE__ ); // http://..../plugins/wp-fxxx/
-			//$this->wpf_file = plugin_basename( __FILE__ ); // wp-fxxx/wp-fxxx.php
-			$this->wpf_pathshort = basename( dirname( __FILE__ ) ); // wp-fxxx
+			$this->wpf_path = plugin_dir_url( __FILE__ ); // http://..../plugins/wpf-xxx/
+			//$this->wpf_file = plugin_basename( __FILE__ ); // wpf-xxx/wpf-xxx.php
+			$this->wpf_pathshort = basename( dirname( __FILE__ ) ); // wpf-xxx
 			$options = get_option( $code );
 			$this->wpf_loglevel = isset( $options['log_level'] ) ? (int) $options['log_level'] : 3;
 
@@ -71,9 +71,9 @@ if ( !class_exists( 'FjqGrid' ) ) {
 				return;
 			}
 			$plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
-			if ( $plugin == 'wp-fjqgrid/index.php' ) {
+			if ( $plugin == 'wpf-jqgrid/index.php' ) {
 				// delete options on deactivate
-				$options = get_option( 'wp-fjqgrid' );
+				$options = get_option( 'wpf-jqgrid' );
 				if ( $options['do_uninstall'] == 1 ) {
 					//drop tables in list
 					global $wpdb;
@@ -81,7 +81,7 @@ if ( !class_exists( 'FjqGrid' ) ) {
 						$wpdb->query( "DROP TABLE IF EXISTS `$table`" );
 					}
 					//remove option entry
-					delete_option( 'wp-fjqgrid' );
+					delete_option( 'wpf-jqgrid' );
 				}
 			}
 		}
@@ -137,7 +137,7 @@ if ( !class_exists( 'FjqGrid' ) ) {
 		{
 			$this_plugin = plugin_basename( __FILE__ );
 			// check to make sure we are on the correct plugin
-			if ( str_replace( 'index.php', 'wp-fjqgrid.php', $file ) == $this_plugin ) {
+			if ( str_replace( 'index.php', 'wpf-jqgrid.php', $file ) == $this_plugin ) {
 				// the anchor tag and href to the URL we want. For a "Settings" link, this needs to be the url of your settings page
 				$settings_link = '<a href="' . get_bloginfo( 'wpurl' ) . '/wp-admin/options-general.php?page=' . $this->wpf_name . '">Settings</a>';
 				// add the link to the list
@@ -211,7 +211,7 @@ if ( !class_exists( 'FjqGrid' ) ) {
 							break;
 					}
 				}
-				require_once('inc/wp-fjqgrid-db.php');
+				require_once('inc/wpf-jqgrid-db.php');
 				$fjqgridDB = new FjqGridDB( $tablename );
 				$fjqgridDB->create_table( $fields, $types, $tablekey );
 			}
@@ -336,6 +336,7 @@ Verified::int(1) DEFAULT NULL";
 				'table' => null,
 				'caption' => null,
 				'editable' => 'false',
+				'sortby' => '1,asc', 
 				'fields' => ''
 							), $atts, $this->wpf_code ) );
 			$options = stripslashes_deep( get_option( $this->wpf_code ) );
@@ -343,6 +344,7 @@ Verified::int(1) DEFAULT NULL";
 			$options['idtable'] = $idtable;
 			$options['caption'] = $caption;
 			$options['editable'] = $editable;
+			$options['sortby'] = $sortby;
 			$allowed_tables = explode( ',', $options['allowed'] );
 			$options['nonce'] = wp_create_nonce( $this->wpf_code . '-nonce' );
 			if ( in_array( $table, $allowed_tables ) ) {
@@ -358,7 +360,7 @@ Verified::int(1) DEFAULT NULL";
 				$this->fplugin_log( "not active shortcode - exit!" );
 				return '<!-- SHORTCODE NON ATTIVO DI ' . $this->wpf_name . ' con ID=' . $options['idtable'] . ' VER. ' . $this->VER . ' --><br/>';
 			} else {
-				require_once('inc/wp-fjqgrid-shortcodes.php');
+				require_once('inc/wpf-jqgrid-shortcodes.php');
 				$fjqgris_sc = new FjqGridShortCodes( $this->wpf_name, $this->wpf_code, $this->VER );
 				return $fjqgris_sc->fjqgrid( $options );
 			}

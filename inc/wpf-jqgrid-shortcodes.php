@@ -26,10 +26,15 @@ if ( !class_exists( 'FjqGridShortCodes' ) ) {
 		private function fjqg_javascript( $options )
 		{
 			global $wpfjqg;
-			require_once('wp-fjqgrid-dbmodel.php');
+			require_once('wpf-jqgrid-dbmodel.php');
 			$table = $options['table'];
 			$idtable = $options['idtable'];
 			$caption = $options['caption'] == '' ? $table : $options['caption'];
+			$sortbyopt = $options['sortby'];
+			$sortby = strtok ( $sortbyopt, ',' );
+			$sortord = strtok ( ',' );
+			$wpfjqg->fplugin_log( 'sort option3', $sortby, 3 );
+			$wpfjqg->fplugin_log( 'sort option3', $sortord, 3 );
 			$nonce = $options['nonce'];
 			// TODO check if network and use network_admin_url()
 			$url = admin_url() . "/admin-ajax.php?action=ajax-wpfjqg&nonce=" . $nonce . "&table=" . $table;
@@ -51,7 +56,7 @@ if ( !class_exists( 'FjqGridShortCodes' ) ) {
             pager: '#wpfjqgNav_$idtable',
             rowNum: 10, rowList: [2, 5, 10, 25, 50, 500],
 			autowidth: true,
-            sortname: '1', sortorder: 'asc',
+            sortname: '".$sortby."', sortorder: '".$sortord."',
             viewrecords: true,
             jsonReader: { repeatitems: false },
             width: 640,

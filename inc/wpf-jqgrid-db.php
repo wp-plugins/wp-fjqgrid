@@ -1,6 +1,6 @@
 <?php
 if ( !class_exists( 'FjqGridDB' ) ) {
-	require_once('wp-fjqgrid-dbmodel.php');
+	require_once('wpf-jqgrid-dbmodel.php');
 
 	class FjqGridDB
 	{
