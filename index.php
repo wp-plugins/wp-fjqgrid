@@ -3,12 +3,12 @@
   Plugin Name: WPF-jqGrid
   Plugin URI: http://wordpress.org/extend/plugins/wpf-jqgrid/
   Description: jqGrid porting to wordpress
-  Version: 0.10
+  Version: 0.11
   Author: faina09
   Author URI: http://profiles.wordpress.org/faina09
   License: GPLv2 or later
  */
-$VER = '0.10';
+$VER = '0.11';
 defined( 'ABSPATH' ) OR exit;
 
 require_once('wpf-jqgdata.php');

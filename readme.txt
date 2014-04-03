@@ -3,7 +3,7 @@ Tags: jquery, jqGrid, grid, table, CRUD, searchable, sortable, editable
 Contributors: faina09
 Donate link: http://goo.gl/QzIZZ
 Requires at least: 3.5
-Tested up to: 3.8
+Tested up to: 3.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -73,6 +73,10 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.11 =
+* deprecated mysql_ calls removed, use mysqli
+* wp 3.9 compatible
+
 = 0.10 =
 * sortby=field,asc|desc into shortcode
 * ATTENTION: renamed, need resave setup page and rename shortcode to [wpf-jqgrid]

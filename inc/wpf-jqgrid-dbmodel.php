@@ -1,5 +1,16 @@
 <?php
 if ( !class_exists( 'FjqGridDbModel' ) ) {
+	define( 'NOT_NULL_FLAG', '1' );    /* Field can't be NULL */
+	define( 'PRI_KEY_FLAG', '2' );     /* Field is part of a primary key */
+	define( 'UNIQUE_KEY_FLAG', '4' );  /* Field is part of a unique key */
+	define( 'MULTIPLE_KEY_FLAG', '8' );   /* Field is part of a key */
+	define( 'BLOB_FLAG', '16' );       /* Field is a blob */
+	define( 'UNSIGNED_FLAG', '32' );   /* Field is unsigned */
+	define( 'ZEROFILL_FLAG', '64' );   /* Field is zerofill */
+	define( 'BINARY_FLAG', '128' );    /* Field is binary   */
+	define( 'ENUM_FLAG', '256' );	   /* Field is an enum */
+	define( 'AUTO_INCREMENT_FLAG', '512' ); /* Field is a autoincrement field */
+	define( 'TIMESTAMP_FLAG', '1024' );	 /* Field is a timestamp */
 
 	class FjqGridDbModel
 	{
@@ -34,18 +45,24 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 				$wpfjqg->fplugin_log( 'custom frm', $frm, 3 );
 			}
 
+			$mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
+			if ( $mysqli->connect_errno ) {
+				printf( "Connect failed: %s\n", $mysqli->connect_error );
+				exit();
+			}
 			$query_cmd = "SELECT * FROM `{$this->tablename}` LIMIT 1 OFFSET 0";
-			$fetch_recordset = mysql_query( $query_cmd );
-			if ( $fetch_recordset == null ) {
+			$result = $mysqli->query( $query_cmd );
+			$fields_cnt = $mysqli->field_count;
+			if ( $fields_cnt == 0 ) {
 				$wpfjqg->fplugin_log( "Query non valida", mysql_error(), 1 );
 				return;
 			}
-			$fields_cnt = mysql_num_fields( $fetch_recordset );
 			for ( $cnt = 0; $cnt < $fields_cnt; $cnt++ ) {
-				$name = mysql_field_name( $fetch_recordset, $cnt );
-				$type = mysql_field_type( $fetch_recordset, $cnt );
-				$size = mysql_field_len( $fetch_recordset, $cnt );
-				$flag = mysql_field_flags( $fetch_recordset, $cnt );
+				$finfo = $result->fetch_field_direct( $cnt );
+				$name = $finfo->name;
+				$type = $finfo->type;
+				$size = $finfo->max_length;
+				$flag = $finfo->flags;
 				$column["name"] = $name;
 				$column["type"] = $type;
 				$column["size"] = $size;
@@ -54,7 +71,7 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 				$column["title"] = ucwords( str_replace( "_", " ", $name ) );
 				$column["searchoptions"] = "{sopt:['bw','cn','eq','ne','ew','nu','nn']}";
 				$column["editable"] = "true";
-				$reqrd = ( strpos( $flag, 'not_null' ) !== false ) ? 'required: true,' : '';
+				$reqrd = ( ( $flag & NOT_NULL_FLAG ) == NOT_NULL_FLAG ) ? 'required: true,' : '';
 				if ( !isset( $frm[$name] ) ) {
 					$column["formatter"] = $this->fjqg_format( $type, $size, $reqrd );
 				} else {
@@ -62,6 +79,8 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 				}
 				$columns[] = $column;
 			}
+			/* free result set */
+			$result->close();
 			$this->columns = $columns;
 			if ( $printinfo ) {
 				$wpfjqg->fplugin_log( 'columns', $columns, 3 );
@@ -77,11 +96,10 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 
 			$keyfield = $this->fieldsnames[0];
 			// search for primary_key
-			//$wpfjqg->fplugin_log('flags',$this->fieldsflags);
 			$keyword = 'primary_key';
 			$i = 0;
 			foreach ( $this->fieldsflags as $key => $flg ) {
-				if ( preg_match( "/{$keyword}/i", $flg ) ) {
+				if ( ( $flg & PRI_KEY_FLAG ) == PRI_KEY_FLAG ) {
 					$keyfield = $this->fieldsnames[$key];
 					$i++;
 				}
@@ -147,14 +165,31 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 			  TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
 			  ENUM
 			  SET
+			 * 
+			  1=>'tinyint',
+			  2=>'smallint',
+			  3=>'int',
+			  4=>'float',
+			  5=>'double',
+			  7=>'timestamp',
+			  8=>'bigint',
+			  9=>'mediumint',
+			  10=>'date',
+			  11=>'time',
+			  12=>'datetime',
+			  13=>'year',
+			  16=>'bit',
+			  //252 is currently mapped to all text and blob types (MySQL 5.0.51a)
+			  253=>'varchar',
+			  254=>'char',
+			  246=>'decimal'
 			 */
-			switch ( strtoupper( $type ) ) {
-				case 'TINYINT':
-				case 'SMALLINT':
-				case 'MEDIUMINT':
-				case 'INT':
-				case 'INTEGER':
-				case 'BIGINT':
+			switch ( $type ) {
+				case 1:
+				case 2:
+				case 3:
+				case 8:
+				case 9:
 					if ( $lung == 1 ) {
 						$frm = "align:'center', formatter: 'checkbox', formatoptions: { disabled: true}, editoptions: { value: '1:0' }";
 						$frm .= ", edittype: 'checkbox', editrules: {required: false}, searchoptions: { sopt: ['eq','ne','nu','nn']}, searchrules:{integer:true, minValue:0, maxValue:1}";
@@ -163,30 +198,30 @@ if ( !class_exists( 'FjqGridDbModel' ) ) {
 						$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . " integer: true, maxValue: 999999999 } ";
 					}
 					break;
-				case 'FLOAT':
-				case 'DOUBLE':
-				case 'DOUBLE PRECISION':
-				case 'REAL':
-				case 'DECIMAL':
-				case 'NUMERIC':
+				case 16:
+					$frm = "align:'center', formatter: 'checkbox', formatoptions: { disabled: true}, editoptions: { value: '1:0' }";
+					$frm .= ", edittype: 'checkbox', editrules: {required: false}, searchoptions: { sopt: ['eq','ne','nu','nn']}, searchrules:{integer:true, minValue:0, maxValue:1}";
+					break;
+				case 4:
+				case 5:
+				case 246:
 					$frm = "align:'right', formatter:'number', formatoptions: {decimalSeparator:',', thousandsSeparator: '.', decimalPlaces: 2, defaulValue: 0}";
 					$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . "}";
 					break;
-				case 'DATE':
+				case 10:
 					$frm = "align:'right', formatter:'date', formatoptions: {srcformat:'Y-m-d',newformat:'d/m/Y'}";
 					$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . "}";
 					break;
-				case 'DATETIME':
+				case 12:
 					$frm = "align:'right', formatter:'date', formatoptions: {srcformat:'Y-m-d H:i:s',newformat:'d/m/Y H:i'}";
 					$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . "}";
 					break;
-				case 'TIME':
+				case 11:
 					$frm = "align:'right', formatter:'date', formatoptions: {srcformat:'H:i:s',newformat:'H:i:s'}";
 					$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . "}";
 					break;
-				case 'CHAR':
-				case 'VARCHAR':
-				case 'STRING':
+				case 253:
+				case 254:
 					$frm = "align:'left'";
 					$frm .= ",editoptions:{'size':20}, editrules:{" . $reqrd . "}";
 					break;
