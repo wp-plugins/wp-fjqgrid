@@ -3,7 +3,7 @@ Tags: jquery, jqGrid, grid, table, CRUD, searchable, sortable, editable
 Contributors: faina09
 Donate link: http://goo.gl/QzIZZ
 Requires at least: 3.5
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -73,46 +73,38 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.12 =
+* WP 4.0
 = 0.11 =
 * deprecated mysql_ calls removed, use mysqli
 * wp 3.9 compatible
-
 = 0.10 =
 * sortby=field,asc|desc into shortcode
 * ATTENTION: renamed, need resave setup page and rename shortcode to [wpf-jqgrid]
-
 = 0.09 =
 * admin-ajax.php path fix (tnx to michael walker)
-
 = 0.08 =
 * js fix
 * reformat code
-
 = 0.07 =
 * minor fix (quotes, empty vars,..)
 * better log for debug
-
 = 0.06 =
 * any field (but only one) can be PK 
 * add log with settable level
 * add role (converted to capability) required to edit a table
 * some formatting added
-
 = 0.05 =
 * fast and simplified first run
 * fix key field name and usage
 * edit date format
-
 = 0.04 =
 * create tables from backend
 * fast startup parameters on setup page
-
 = 0.03 =
 * fix - better readme
-
 = 0.02 =
 * edit/delete/insert on popup window
-
 = 0.01 =
 * Initial release of plugin.
 * Please test and report any issue you find, and any feature you want. I'll try to fix the firsts and to implement the seconds!
@@ -120,9 +112,7 @@ You can use WP plugin support page. I'll be happy to help you!
 == Upgrade Notice ==
 = 0.09 =
 * admin-ajax.php path fix (tnx to michael walker)
-
 = 0.05 =
 * fast and simplified first run
-
 = 0.02 =
 * edit/delete/insert on popup window
