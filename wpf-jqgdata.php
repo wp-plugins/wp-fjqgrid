@@ -69,7 +69,6 @@ if ( !class_exists( 'FjqGridData' ) ) {
 					$sqlwhere = $this->fjqg_builfilter( $is_search );
 					$options = stripslashes_deep( get_option( $this->wpf_code ) );
 					$allowed_tables = explode( ',', $options['allowed'] );
-					ob_clean();
 					if ( in_array( $tablename, $allowed_tables ) ) {
 						echo $this->fjqg_data( $tablename, $sqlwhere, $page, $rows, $sidx, $sord );
 					} else {

@@ -2,13 +2,13 @@
 /*
   Plugin Name: WPF-jqGrid
   Plugin URI: http://wordpress.org/extend/plugins/wpf-jqgrid/
-  Description: jqGrid porting to wordpress
-  Version: 0.12
+  Description: jqGrid porting to wordpress. Use shortcode like <code>[wpf-jqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true]</code> 
+  Version: 0.13
   Author: faina09
   Author URI: http://profiles.wordpress.org/faina09
   License: GPLv2 or later
  */
-$VER = '0.12';
+$VER = '0.13';
 defined( 'ABSPATH' ) OR exit;
 
 require_once('wpf-jqgdata.php');

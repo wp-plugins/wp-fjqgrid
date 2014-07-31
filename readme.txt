@@ -8,7 +8,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Use jqGrid (jquery plugin) to manage database tables.
+Use jqGrid (a jQuery plugin) to manage database tables. Use shortcode like [wpf-jqgrid table='wpf_jqgrid_sample' idtable=1 caption='name to display' editable=true]
 
 == Description ==
 Use the jqGrid plugin of jquery to manage MySql db tables.
@@ -21,7 +21,7 @@ I planned to develop many other features, but this depends by the interest of th
 
 If any bug found please ask me for support!
 
-Info and samples at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
+Info and samples at <a href="http://faina09.it/category/wp-plugins/wp-fjqgrid/">WPF-jqGrid developer's site</a>
 
 == Installation ==
 1. Unzip and place the 'wpf-jqgrid' folder in your 'wp-content/plugins' directory.
@@ -73,6 +73,8 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.13 =
+* fix ob_clean
 = 0.12 =
 * WP 4.0
 = 0.11 =
