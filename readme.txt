@@ -73,6 +73,8 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.14 =
+* fix create table MySQL 5.6
 = 0.13 =
 * fix ob_clean
 = 0.12 =

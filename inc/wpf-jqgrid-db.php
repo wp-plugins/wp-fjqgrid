@@ -28,10 +28,10 @@ if ( !class_exists( 'FjqGridDB' ) ) {
 			$fieldsdescr = '';
 			$i = 0;
 			foreach ( $fieldsnames as $field ) {
-				$fieldsdescr .= $field . ' ' . $fieldsdefs[$i++] . ', ';
+				$fieldsdescr .= '`'.$field . '` ' . $fieldsdefs[$i++] . ', ';
 			}
 
-			$sql_create_table = "CREATE TABLE `{$this->tablename}` (
+			$sql_create_table = "CREATE TABLE IF NOT EXISTS `{$this->tablename}` (
 				{$fieldsdescr} 
 				PRIMARY KEY  ($keyfield)
 				) $charset_collate; ";

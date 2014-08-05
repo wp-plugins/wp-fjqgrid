@@ -205,9 +205,11 @@ if ( !class_exists( 'FjqGrid' ) ) {
 							$tablekey = $frmarray[1];
 							break;
 						default:
-							//here are the fields names - fields types couples
-							$fields[] = $frmarray[0];
-							$types[] = $frmarray[1];
+							if (isset ( $frmarray[1] ) ) {
+								//here are the fields names - fields types couples
+								$fields[] = $frmarray[0];
+								$types[] =  $frmarray[1];
+							}
 							break;
 					}
 				}
