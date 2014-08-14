@@ -139,7 +139,7 @@ if ( !class_exists( 'FjqGrid' ) ) {
 			// check to make sure we are on the correct plugin
 			if ( str_replace( 'index.php', 'wpf-jqgrid.php', $file ) == $this_plugin ) {
 				// the anchor tag and href to the URL we want. For a "Settings" link, this needs to be the url of your settings page
-				$settings_link = '<a href="' . get_bloginfo( 'wpurl' ) . '/wp-admin/options-general.php?page=' . $this->wpf_name . '">Settings</a>';
+				$settings_link = '<a href="' . get_bloginfo( 'wpurl' ) . '/wp-admin/options-general.php?page=' . $this->wpf_code . '">Settings</a>';
 				// add the link to the list
 				array_unshift( $links, $settings_link );
 			}
@@ -304,16 +304,16 @@ Verified::int(1) DEFAULT NULL";
 						<tr style="vertical-align: top"><th scope="row"><?php _e( 'custom fields formatting (| separated) es: table::field::align:\'center\',editoptions:{\'size\':40}|', $this->wpf_code ); ?></th>
 							<td><textarea rows="3" cols="80" style="height: 100px; width: 60%;" name="<?php echo $this->wpf_code; ?>[frmtfield]"><?php echo $options['frmtfield']; ?></textarea></td>
 						</tr>
-						<tr style="background-color:#72969F; vertical-align: top"><th scope="row"><?php _e( 'clean all on deactivate', $this->wpf_code ); ?></th>
+						<tr style="background-color:#72969F; vertical-align: top"><th scope="row" style="color:#FFF; padding-left:10px"><?php _e( 'clean all on deactivate', $this->wpf_code ); ?></th>
 							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[do_uninstall]" value="1" <?php checked( '1', $options['do_uninstall'] ); ?> /></td>
 						</tr>
-						<tr style="background-color:#72969F; vertical-align: top"><th scope="row"><?php _e( 'tables to drop on deactivate (comma separated)', $this->wpf_code ); ?></th>
+						<tr style="background-color:#72969F; vertical-align: top"><th scope="row" style="color:#FFF; padding-left:10px"><?php _e( 'tables to drop on deactivate (comma separated)', $this->wpf_code ); ?></th>
 							<td><input type="text" style="width:80%;" name="<?php echo $this->wpf_code; ?>[do_drop]" value="<?php echo $options['do_drop']; ?>"/></td>
 						</tr>						
-						<tr style="background-color:#558c9a; vertical-align: top"><th scope="row"><?php _e( 'execute create table', $this->wpf_code ); ?></th>
+						<tr style="background-color:#558c9a; vertical-align: top"><th scope="row" style="color:#FFF; padding-left:10px"><?php _e( 'execute create table', $this->wpf_code ); ?></th>
 							<td><input type="checkbox" name="<?php echo $this->wpf_code; ?>[do_createtable]" value="1" <?php checked( '1', $options['do_createtable'] ); ?> /></td>
 						</tr>											
-						<tr style="background-color:#558c9a; vertical-align: top"><th scope="row"><?php _e( 'create sql table', $this->wpf_code ); ?></th>
+						<tr style="background-color:#558c9a; vertical-align: top"><th scope="row" style="color:#FFF; padding-left:10px"><?php _e( 'create sql table', $this->wpf_code ); ?></th>
 							<td>
 								<textarea rows="3" cols="80" style="height: 100px; width: 60%;" name="<?php echo $this->wpf_code; ?>[createtable]"><?php echo $options['createtable']; ?></textarea></td>
 						</tr>

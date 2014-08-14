@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `wpf_jqgrid_sample` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `City` varchar(100) DEFAULT NULL,
-  `Temp_°C` decimal(10,2) DEFAULT NULL,
+  `Temp_C` decimal(10,2) DEFAULT NULL,
   `DateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `wpf_jqgrid_sample` (
 -- Dumping data for table `wpf_jqgrid_sample`
 --
 
-INSERT INTO `wpf_jqgrid_sample` (`ID`, `City`, `Temp_°C`, `DateTime`) VALUES
+INSERT INTO `wpf_jqgrid_sample` (`ID`, `City`, `Temp_C`, `DateTime`) VALUES
 (1, 'Udine', '4.10', '2014-01-26 19:00:00'),
 (2, 'Cividale', '2.70', '2014-01-26 19:23:00'),
 (3, 'Udine', '4.00', '2014-01-26 21:00:00'),

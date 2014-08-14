@@ -23,6 +23,8 @@ If any bug found please ask me for support!
 
 Info and samples at <a href="http://faina09.it/category/wp-plugins/wp-fjqgrid/">WPF-jqGrid developer's site</a>
 
+WARNING: do to a plugin rename, the current plugin directory is wp-content\plugins\<strong>wp-fjqgrid</strong> while the plugin name and the shortcode has the '-' in a different position: <strong>wpf-jqgrid</strong>.
+
 == Installation ==
 1. Unzip and place the 'wpf-jqgrid' folder in your 'wp-content/plugins' directory.
 2. Activate the plugin.
@@ -48,9 +50,11 @@ You can use WP plugin support page. I'll be happy to help you!
 * Some themes may require a css tuning to display properly all the elements.
 
 = Which are the know limitations or issues? =
+* There is a column order issue with <strong>Theme Twenty Fourteen</strong> that I was unable to fix (if you can, please let me know!). Please use a different Theme.
 * Your table MUST have ONE and ONLY ONE field set as primary key, if not the first field will be use as PK.
 * The fields render and size are set to a default, possible but not easy to set them for each field
 * No decode/pull down lists available
+* No master/detail feature 
 * Must insert numbers with DOT decimal separator and NO thousand separator
 * Datetime edit check is not supported in jqGrid
 * (all these will be fixed in future releases, but until now...)
@@ -73,6 +77,9 @@ You can use WP plugin support page. I'll be happy to help you!
 3. Edit popup window, see live at <a href="http://faina09.it/category/wp-plugins/wpfjqgrid/">WPF-jqGrid developer's site</a>
 
 == Changelog ==
+= 0.15 =
+* add German translation (thanks to Tobias)
+* minor fixes and doc updates
 = 0.14 =
 * fix create table MySQL 5.6
 = 0.13 =
