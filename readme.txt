@@ -20,7 +20,9 @@ This is a very first release with many limitations; jqGrid offers a lot of featu
 I planned to develop many other features, but this depends by the interest of the users, and eventually from the support. If you want to contribute with a translation or writing code ask me, if you want to make a donation here's the link.
 
 thanks to:
+
  Tobias for German de_DE translation
+ 
  Andrijana Nikolic <andrijanan@webhostinggeeks.com> by WebHostingGeeks Support (http://webhostinggeeks.com/) for  Serbo-Croatian sr_RS translation
 
 If any bug found please ask me for support!
