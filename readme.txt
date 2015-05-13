@@ -3,7 +3,7 @@ Tags: jquery, jqGrid, grid, table, CRUD, searchable, sortable, editable
 Contributors: faina09
 Donate link: http://goo.gl/QzIZZ
 Requires at least: 3.5
-Tested up to: 4.0
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,9 +21,9 @@ I planned to develop many other features, but this depends by the interest of th
 
 thanks to:
 
- Tobias for German de_DE translation
+* Tobias for German de_DE translation
  
- Andrijana Nikolic <andrijanan@webhostinggeeks.com> by WebHostingGeeks Support (http://webhostinggeeks.com/) for  Serbo-Croatian sr_RS translation
+* Andrijana Nikolic <andrijanan@webhostinggeeks.com> by WebHostingGeeks Support (http://webhostinggeeks.com/) for  Serbo-Croatian sr_RS translation
 
 If any bug found please ask me for support!
 
